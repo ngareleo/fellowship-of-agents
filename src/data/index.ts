@@ -3,11 +3,11 @@ export {
   useCarById,
   useSetCars,
   useFilteredCars,
-} from "~/data/cars";
+} from "./cars";
 
 export {
   useFilters,
   useSetFilter,
   useResetFilters,
   type Filters,
-} from "~/data/filters";
+} from "./filters";
