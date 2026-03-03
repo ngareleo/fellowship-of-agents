@@ -14,7 +14,7 @@ If a PR number is provided via `$ARGUMENTS`, triage in the context of that merge
 
 ## Label system
 
-Every issue carries exactly one *status* label and one or more *type* labels.
+Every issue carries exactly one *status* label, one or more *type* labels, and exactly one *priority* label.
 
 ### Status labels
 | Label | Meaning |
@@ -28,6 +28,20 @@ Every issue carries exactly one *status* label and one or more *type* labels.
 | `build-systems` | Tooling, bundlers, CI, config, data layer |
 | `ui` | React components, layouts, Storybook stories |
 | `code-quality` | Refactors, convention fixes, linting rules |
+
+### Priority labels
+| Label | Meaning | When to use |
+|-------|---------|-------------|
+| `p1-high` | Critical path | Blocks other issues, or is core functionality the app cannot work without |
+| `p2-medium` | Important but not blocking | Useful feature or infrastructure that doesn't gate other work |
+| `p3-low` | Nice to have | Convention fixes, cosmetic improvements, no feature dependency |
+
+**Priority assignment rules:**
+- Any issue that blocks one or more other issues is at least `p1-high`
+- Any issue on the longest path to a key deliverable is `p1-high`
+- Standalone features or infrastructure with no downstream dependencies are `p2-medium`
+- Code quality / convention issues with no functional impact are `p3-low`
+- When creating a new issue, if it feeds into a `p1-high` issue it inherits `p1-high`
 
 ---
 
@@ -97,13 +111,13 @@ Print a clear summary in this format:
 - #N Title
 
 **Currently ready (available to pick up):**
-| # | Title | Type |
-|---|-------|------|
-| N | ...   | build-systems / ui / code-quality |
+| # | Title | Type | Priority |
+|---|-------|------|----------|
+| N | ...   | build-systems / ui / code-quality | p1-high / p2-medium / p3-low |
 
 **Still blocked:**
-| # | Title | Waiting on |
-|---|-------|-----------|
-| N | ...   | #X, #Y |
+| # | Title | Priority | Waiting on |
+|---|-------|----------|-----------|
+| N | ...   | ...      | #X, #Y |
 
-**Recommendation:** State which `ready` item has the highest impact (i.e. unblocks the most downstream issues) and should be picked up next.
+**Recommendation:** Pick the highest-priority `ready` item that unblocks the most downstream work. If two items share priority, prefer the one with more dependents.
