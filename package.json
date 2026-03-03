@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "vite",
     "build": "rspack build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -17,11 +19,17 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "@rsbuild/core": "^1.7.3",
+    "@rsbuild/plugin-react": "^1.4.5",
     "@rspack/cli": "^1.7.6",
     "@rspack/core": "^1.7.6",
+    "@storybook/react": "^10.2.14",
+    "@types/node": "^25.3.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
+    "storybook": "^10.2.14",
+    "storybook-react-rsbuild": "^3.3.0",
     "typescript": "^5.9.3",
     "vite": "^7.3.1"
   }
