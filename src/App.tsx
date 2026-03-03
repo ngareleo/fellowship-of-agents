@@ -1,17 +1,18 @@
-import { BrowserRouter, Route, Routes } from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import { RootLayout } from "~/components";
 import { CarDetailPage, HomePage, NotFoundPage } from "~/pages";
 
+const router = createBrowserRouter([
+  {
+    element: <RootLayout />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: "cars/:id", element: <CarDetailPage /> },
+      { path: "*", element: <NotFoundPage /> },
+    ],
+  },
+]);
+
 export function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route element={<RootLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="cars/:id" element={<CarDetailPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 }
