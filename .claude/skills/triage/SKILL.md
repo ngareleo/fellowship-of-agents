@@ -103,7 +103,10 @@ Review comments on a PR sometimes contain suggestions that should become tracked
   --jq '[.[] | {user: .user.login, body: .body}]'
 ```
 
-For each comment made by the **repo owner / team lead** (not an agent reply), read it carefully. If it suggests work that is not yet tracked — e.g. "we should also…", "consider adding…", "this needs…" — create a new issue:
+For each comment made by the **repo owner / team lead** (not an agent reply), read it carefully and decide which of two actions to take:
+
+#### 3a — Create a new issue
+If the comment suggests work that is **not yet tracked** — e.g. "we should also…", "consider adding…", "this needs…":
 
 ```bash
 ~/bin/gh issue create --repo ngareleo/fellowship-of-agents \
@@ -124,6 +127,28 @@ EOF
 
 Apply the label system and priority rules to every new issue. Reference the originating PR comment in the issue body.
 
+#### 3b — Enrich an existing issue
+If the comment contains context, constraints, or decisions that are **relevant to an already-open issue** — e.g. a design decision, an edge case, a specific API to use — append it to that issue's body so agents picking it up have the full picture:
+
+```bash
+# Fetch the existing issue body first
+~/bin/gh issue view N --repo ngareleo/fellowship-of-agents --json body
+
+# Append a Context section with the PR comment
+~/bin/gh issue edit N --repo ngareleo/fellowship-of-agents --body "$(cat <<'EOF'
+[existing body]
+
+---
+
+## Context from PR #$ARGUMENTS
+> "[Exact quote from the comment]"
+> — @username, PR #$ARGUMENTS review comment
+EOF
+)"
+```
+
+Use your judgement to decide which action applies — a comment can trigger both (create a new issue AND enrich an existing one if it touches two concerns).
+
 ### Step 4 — Identify newly unblocked issues
 For each issue that just closed, look up what it blocks in the dependency graph above. For each downstream issue, check whether **all** its blockers are now closed:
 ```bash
@@ -143,6 +168,9 @@ Print a clear summary in this format:
 
 **New issues created from PR comments:**
 - #N Title (from PR #X comment by @user)
+
+**Existing issues enriched with PR comment context:**
+- #N Title — added context: [one-line summary]
 
 **Newly unblocked (blocked → ready):**
 - #N Title
