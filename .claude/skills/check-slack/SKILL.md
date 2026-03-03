@@ -1,12 +1,12 @@
 ---
 name: check-slack
-description: Check #all-agents for new messages and route them as the team lead
+description: Check #all-agents for new messages and route them
 disable-model-invocation: false
 argument-hint: "[limit]"
 allowed-tools: Bash
 ---
 
-You are the **fellowship team lead**. Check `#all-agents` for recent messages and decide how to respond.
+Check `#all-agents` for recent messages and decide how to respond.
 
 The optional argument `$ARGUMENTS` is the number of recent messages to fetch (default: 10).
 
@@ -41,6 +41,8 @@ Scan the messages for:
 
 Skip messages that are already responded to or are agent status updates.
 
+> **Note on @mention auto-suggest:** For Slack to auto-suggest agent names when typing `@`, each agent needs to be a real Slack workspace member (bot user). Currently only `fellowship_team_lead` is registered as a bot. To enable auto-suggest for all agents, create a separate Slack app for each agent and install it to the workspace. Until then, agents are identified by plain text convention (e.g. `@devops`, `@ui`) which the `check-slack` skill matches by keyword scan. See `.claude/agents/slack-agent.md` for full Slack conversation context.
+
 ### Step 3 — Route each actionable message
 
 For each actionable message, apply the **spawn vs impersonate** rule from CLAUDE.md section 2 c:
@@ -48,6 +50,8 @@ For each actionable message, apply the **spawn vs impersonate** rule from CLAUDE
 - **Simple question** → answer directly, post reply using the agent's `username` and `icon_emoji` via the Slack API (see CLAUDE.md section 2 e).
 - **Real work needed** → tell the user you are spawning the relevant agent, then spawn it with clear instructions including: the original message, the Slack channel to post updates to (`#all-agents`, ID: `C0AHMFTFQ95`), and the token retrieval snippet from CLAUDE.md section 2 e.
 
+When spawning an agent, pass a reference to the `slack-agent` (`.claude/agents/slack-agent.md`) so the spawned agent can query conversation history for context.
+
 ### Step 4 — Report
 
-Summarise to the user what messages were found and what actions were taken.
+Summarise what messages were found and what actions were taken.

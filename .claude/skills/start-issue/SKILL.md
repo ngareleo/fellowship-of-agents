@@ -76,3 +76,24 @@ Print a brief summary back to the user covering:
 3. **Open questions** — anything unclear before starting work (missing context, ambiguous requirements, potential conflicts with other open issues).
 
 Do not begin implementing until the user confirms or answers any open questions.
+
+---
+
+### Step 8 — After completing work: sleep
+
+When the implementation is done and a PR has been created:
+
+1. Add the `pending_review` label to the issue:
+
+```bash
+~/bin/gh issue edit $ARGUMENTS --repo ngareleo/fellowship-of-agents --add-label "pending_review"
+```
+
+2. Post to Slack as the relevant agent (use the agent's identity from `.claude/agents/`) with:
+   - PR link
+   - Summary of what was done
+   - What you need reviewed
+
+3. **Stop work.** Do not wait for a response. The team lead will re-spawn you via `/continue-issue` when the review is complete.
+
+> When the user responds on Slack (e.g. "@ui_agent I've reviewed your PR..."), the team lead will spawn you again. Use the `/continue-issue` skill to reload context from the previous session and act on the review feedback.

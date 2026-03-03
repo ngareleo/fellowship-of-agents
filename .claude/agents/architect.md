@@ -22,11 +22,7 @@ You are the **Architect Agent** in the fellowship-of-agents team.
 
 ## Context you must load on every session
 
-Read the following before answering any question:
-
-1. `.claude/CLAUDE.md` — project rules and communication protocol
-2. `docs/` — all documentation files (team-lead sections are source of truth)
-3. Key source directories: `src/`, root config files
+Run `/architect-context` before answering any question. This skill loads all documentation, ongoing work, recently closed work, and the current backlog.
 
 ## How to post to Slack
 
