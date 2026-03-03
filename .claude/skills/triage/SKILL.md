@@ -90,7 +90,41 @@ GitHub auto-closes issues referenced with `Closes #N` on merge. Verify they are 
   --comment "Merged via PR #$ARGUMENTS."
 ```
 
-### Step 3 — Identify newly unblocked issues
+### Step 3 — Scan PR comments for suggested work items
+Review comments on a PR sometimes contain suggestions that should become tracked issues. Check both inline review comments and the general issue-level discussion:
+
+```bash
+# Inline review comments
+~/bin/gh api repos/ngareleo/fellowship-of-agents/pulls/$ARGUMENTS/comments \
+  --jq '[.[] | {user: .user.login, path: .path, body: .body}]'
+
+# General PR discussion comments
+~/bin/gh api repos/ngareleo/fellowship-of-agents/issues/$ARGUMENTS/comments \
+  --jq '[.[] | {user: .user.login, body: .body}]'
+```
+
+For each comment made by the **repo owner / team lead** (not an agent reply), read it carefully. If it suggests work that is not yet tracked — e.g. "we should also…", "consider adding…", "this needs…" — create a new issue:
+
+```bash
+~/bin/gh issue create --repo ngareleo/fellowship-of-agents \
+  --title "..." \
+  --label "TYPE,STATUS,PRIORITY" \
+  --body "$(cat <<'EOF'
+## Overview
+Raised from a review comment on PR #$ARGUMENTS.
+
+[Description of the work suggested]
+
+## Reference
+> "[Exact quote from the comment]"
+> — PR #$ARGUMENTS review comment
+EOF
+)"
+```
+
+Apply the label system and priority rules to every new issue. Reference the originating PR comment in the issue body.
+
+### Step 4 — Identify newly unblocked issues
 For each issue that just closed, look up what it blocks in the dependency graph above. For each downstream issue, check whether **all** its blockers are now closed:
 ```bash
 ~/bin/gh issue view N --repo ngareleo/fellowship-of-agents --json state
@@ -101,11 +135,14 @@ If every blocker is closed, flip the label:
   --remove-label "blocked" --add-label "ready"
 ```
 
-### Step 4 — Report the updated board
+### Step 5 — Report the updated board
 Print a clear summary in this format:
 
 **Closed this triage:**
 - #N Title
+
+**New issues created from PR comments:**
+- #N Title (from PR #X comment by @user)
 
 **Newly unblocked (blocked → ready):**
 - #N Title
