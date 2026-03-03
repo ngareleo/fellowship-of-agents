@@ -2,7 +2,7 @@
 
 I'm using this repo to try around advanced agentic coding. The goal is to use all of claude code features (Agent Teams, Skills, Hooks) to see if I can create a well oiled team of agents running automously "a fellowship of agents".
 
-We'll create a sample project called "autoshop"; an ecommerce site for selling and buying cars. Here are the objectives I aim to achieve:
+We'll create a sample project called "fellowship-of-agents"; an ecommerce site for selling and buying cars. Here are the objectives I aim to achieve:
 
 1. Explore figma mcp to create sites
 2. Connect agents with my github repository

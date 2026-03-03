@@ -6,7 +6,7 @@ argument-hint: "[pr-number]"
 allowed-tools: Bash
 ---
 
-You are triaging the GitHub issue board for the autoshop project (repo: `ngareleo/fellowship-of-agents`). The `gh` CLI is at `~/bin/gh`.
+You are triaging the GitHub issue board for the fellowship-of-agents project (repo: `ngareleo/fellowship-of-agents`). The `gh` CLI is at `~/bin/gh`.
 
 If a PR number is provided via `$ARGUMENTS`, triage in the context of that merged PR. Otherwise perform a general triage of the full board.
 

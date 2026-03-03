@@ -1,5 +1,5 @@
 {
-  "name": "autoshop",
+  "name": "fellowship-of-agents",
   "packageManager": "yarn@4.6.0",
   "scripts": {
     "dev": "vite",

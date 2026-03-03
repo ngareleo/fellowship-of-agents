@@ -6,7 +6,7 @@ argument-hint: "[issue-number]"
 allowed-tools: Bash, Read, Glob, Grep
 ---
 
-You are picking up GitHub issue `#$ARGUMENTS` in the autoshop project (repo: `ngareleo/fellowship-of-agents`). The `gh` CLI is at `~/bin/gh`.
+You are picking up GitHub issue `#$ARGUMENTS` in the fellowship-of-agents project (repo: `ngareleo/fellowship-of-agents`). The `gh` CLI is at `~/bin/gh`.
 
 Work through these steps in order before writing any code.
 
