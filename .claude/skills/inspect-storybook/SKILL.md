@@ -25,13 +25,22 @@ If it returns `200`, proceed to Step 2.
 If not running, start it in the background:
 
 ```bash
-cd /home/dag/Projects/fellowship-of-agents && yarn storybook &
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$REPO_ROOT" && yarn storybook &
 ```
 
 Then wait for it to be ready:
 
 ```bash
-sleep 15 && curl -s -o /dev/null -w "%{http_code}" http://localhost:6006
+# Wait up to ~60 seconds for Storybook to be ready
+for i in {1..30}; do
+  status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:6006 || echo "000")
+  if [ "$status" -eq 200 ]; then
+    echo "Storybook is ready (HTTP $status)"
+    break
+  fi
+  sleep 2
+done
 ```
 
 ---
