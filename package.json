@@ -19,6 +19,7 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "@mauricio.wolff/mcp-obsidian": "0.8.1",
     "@rsbuild/core": "^1.7.3",
     "@rsbuild/plugin-react": "^1.4.5",
     "@rspack/cli": "^1.7.6",
