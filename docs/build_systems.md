@@ -23,4 +23,16 @@ For testing our components, we use [storybook](https://storybook.js.org/docs) te
   - `/cars/:id` — `CarDetailPage`
   - `*` — `NotFoundPage` (404 fallback)
 
+## MUI Theme Setup (issue #20)
+
+- A single MUI theme is defined in `src/theme/index.ts` and exported as the default export.
+- The app is wrapped in `<ThemeProvider theme={theme}>` and `<CssBaseline />` inside `src/main.tsx`.
+- The theme defines:
+  - **palette** — `primary` (blue-600), `secondary` (violet-700), `success` (green-600), `error`, `warning`, `background`, `text`, and a `custom` object for design-system-specific tokens (badge colours, gradient stops, divider, etc.)
+  - **typography** — Inter font family with a complete scale from h1 to caption; `button` has `textTransform: "none"` and `fontWeight: 600`.
+  - **shape** — `borderRadius: 8`
+- All components in `src/components/` must use theme tokens via `useTheme()` or the `sx` prop theme callback. No hardcoded hex colour literals are permitted.
+- The `custom` palette key is extended via TypeScript module augmentation at the bottom of `src/theme/index.ts`. Add new tokens there when needed.
+- The `yarn` binary is available via corepack at `/home/dag/.nvm/versions/node/v24.14.0/lib/node_modules/corepack/shims/yarn`.
+
 <!--- End of Claude and agents instructions -->
