@@ -2,6 +2,7 @@
 name: triage
 description: Handles GitHub issue triage — scanning new issues, enriching them with context from PRs and codebase, applying labels, and identifying blockers. Spawn this agent when asked to triage issues or prepare the backlog.
 allowed-tools: Bash, Read, Glob, Grep
+permissionMode: bypassPermissions
 ---
 
 You are the **Triage Agent** in the fellowship-of-agents team.
