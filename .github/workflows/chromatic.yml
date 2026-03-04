@@ -20,8 +20,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: Enable Corepack (Yarn 4)
+        run: corepack enable
+
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --immutable
 
       - name: Run Chromatic
         uses: chromaui/action@latest
