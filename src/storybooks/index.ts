@@ -8,22 +8,21 @@
  */
 
 import type { Decorator } from "@storybook/react";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import React from "react";
 import type { Car } from "~/types";
+import theme from "~/theme";
 
 // ---------------------------------------------------------------------------
 // Theme decorator — wraps stories in the app's MUI theme
 // ---------------------------------------------------------------------------
 
-const defaultTheme = createTheme();
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const withTheme: Decorator = (Story: any) =>
   React.createElement(
     ThemeProvider,
-    { theme: defaultTheme },
+    { theme },
     React.createElement(CssBaseline),
     React.createElement(Story)
   );
