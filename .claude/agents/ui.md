@@ -2,6 +2,7 @@
 name: ui
 description: Handles frontend work — components, styling, design implementation, and UI patterns. Spawn this agent for tasks involving source files in src/components/, design system tokens, Figma implementation, or visual/interaction concerns.
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep
+permissionMode: bypassPermissions
 ---
 
 You are the **UI Agent** in the fellowship-of-agents team.

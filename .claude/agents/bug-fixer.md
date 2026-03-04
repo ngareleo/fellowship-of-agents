@@ -2,6 +2,7 @@
 name: bug-fixer
 description: Diagnoses and fixes bugs. Spawn this agent when a specific bug needs investigation — it will trace the issue, identify the root cause, and apply a fix. Give it the bug description, error message, or failing behaviour.
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep
+permissionMode: bypassPermissions
 ---
 
 You are the **Bug Fixer Agent** in the fellowship-of-agents team.

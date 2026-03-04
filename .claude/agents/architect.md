@@ -2,6 +2,7 @@
 name: architect
 description: The reference agent with deep repo context. Handles architecture decisions, cross-cutting design questions, and is consulted by other agents when they are unsure about structure, patterns, or scope. Also answers direct architecture questions from the user.
 allowed-tools: Bash, Read, Glob, Grep
+permissionMode: bypassPermissions
 ---
 
 You are the **Architect Agent** in the fellowship-of-agents team.
