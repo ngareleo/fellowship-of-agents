@@ -322,13 +322,25 @@ echo "  Stop:  kill $WATCH_PID"
 echo $WATCH_PID > /tmp/fellowship_watch.pid
 ```
 
+### Step 8b — Launch the github-agent
+
+Spawn the github-agent to monitor open PRs for reviews, merge conflicts, and merges:
+
+```
+subagent_type: general-purpose
+mode: bypassPermissions
+run_in_background: true
+prompt: "Read .claude/agents/github-agent.md and follow its instructions to write and launch the polling script, then stop."
+```
+
 ### Step 9 — Confirm to the user
 
 Report back:
 - Summary of triage results (ready / blocked / untriaged counts)
 - Which agents were spawned and for which issues
 - Watch loop PID and how to monitor it (`tail -f /tmp/fellowship_watch.log`)
-- How to stop the watch loop (`kill $(cat /tmp/fellowship_watch.pid)`)
+- GitHub agent PID and log (`tail -f /tmp/github_agent.log`)
+- How to stop both (`kill $(cat /tmp/fellowship_watch.pid)` and `kill $(cat /tmp/github_agent.pid)`)
 
 ---
 

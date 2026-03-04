@@ -40,8 +40,31 @@ The team lead (you) is mostly idle. Your job is to monitor `#all-agents` for new
 | `@triage` | Issue triage and prioritisation | When asked to triage new issues or scan PRs |
 | `@bug-fixer` | Diagnose and fix bugs | Any bug that requires investigation across files |
 | `@architect` | Repo-wide context, design decisions, cross-agent reference | When any agent needs design guidance, or when asked about architecture |
+| `@github-agent` | Background PR monitor | Runs as a persistent background script — spawn once at start-of-day |
 
 The **architect agent** has the deepest context. Other agents should be instructed to consult it when they are unsure about structure, patterns, or scope.
+
+### 2 b-i. Replacing completed agents
+
+When an agent completes an issue (you receive a task completion notification or see a Slack post confirming a PR was opened), **immediately pick the next issue of the same type** and spawn a replacement agent for it.
+
+Rules:
+- Match the type label of the completed issue (`ui`, `build-systems`, `code-quality`, `bug`) to find the next candidate.
+- Apply the same dispatch constraints: at most one `ui` agent running at any time.
+- Select the highest-priority ready issue of that type that is not already being worked on.
+- If no ready issue of the same type exists, fill the slot with the highest-priority ready issue of any type (respecting the one-UI-at-a-time rule).
+
+This keeps the pipeline full without waiting for the next morning routine.
+
+### 2 b-ii. Responding to github-agent notifications
+
+The github-agent polls open PRs and posts to Slack when events occur. When you see one of its messages, act immediately:
+
+| Event | github-agent message contains | Your action |
+|-------|-------------------------------|-------------|
+| Review submitted | `received a review` | Spawn the original agent type via `/continue-issue <issue-number>` |
+| Merge conflict | `has a merge conflict` | Spawn the original agent type via `/continue-issue <issue-number>` with instructions to resolve the conflict |
+| PR merged | `was merged` | Close the linked issue; spawn the next ready issue of the same type |
 
 ### 2 c. Spawn vs impersonate
 
