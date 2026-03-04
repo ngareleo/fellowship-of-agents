@@ -57,9 +57,22 @@ for i in backlog:
 "
 ```
 
-### Step 6 — Confirm context is loaded
+### Step 6 — Read design documents from the Obsidian vault
 
-After completing all steps, post to Slack that you are ready:
+The Obsidian vault (`Fellowship-Of-Agents`) contains design documents and decision records written by agents before or during implementation. These are the canonical record of approved approaches and open questions.
+
+Read all documents in the vault to collect prior decisions:
+
+1. Use `mcp__obsidian__list_directory` on `Design/` to list all design docs.
+2. Use `mcp__obsidian__list_directory` on `Status/` to read the project status.
+3. Use `mcp__obsidian__read_note` to read each document in full.
+4. Pay special attention to **Recommended approach**, **Open questions**, and **Acceptance criteria** sections.
+
+These documents take precedence over inferred context when they address a specific topic.
+
+### Step 7 — Confirm context is loaded
+
+After completing all steps (including reading vault documents), post to Slack that you are ready:
 
 ```python
 import urllib.request, json, re, os

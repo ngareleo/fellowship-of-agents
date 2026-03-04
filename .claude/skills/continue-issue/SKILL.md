@@ -64,7 +64,11 @@ Based on the issue type and PR diff, re-read the files that were previously modi
 git diff main --name-only
 ```
 
-### Step 6 — Confirm understanding before acting
+### Step 6 — Check the Obsidian vault for design docs
+
+Search the vault for any design documents related to this issue. Use the `/read-doc` skill with the issue title or topic. If a design doc exists, read it in full — it contains the approved approach and acceptance criteria that guide your implementation.
+
+### Step 7 — Confirm understanding before acting
 
 Post to Slack summarising:
 1. What was done in the previous session (PR summary)
@@ -73,11 +77,11 @@ Post to Slack summarising:
 
 Use the relevant agent's Slack identity (see `.claude/agents/`) before proceeding.
 
-### Step 7 — Implement the review feedback
+### Step 8 — Implement the review feedback
 
 Apply all changes requested in the review comments. Push to the existing branch when done.
 
-### Step 8 — Confirm CI checks are green
+### Step 9 — Confirm CI checks are green
 
 After pushing, wait for all GitHub Actions checks to complete:
 
@@ -94,7 +98,7 @@ gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents
 gh run view --repo ngareleo/fellowship-of-agents --log-failed
 ```
 
-### Step 9 — Post completion update to Slack
+### Step 10 — Post completion update to Slack
 
 Once all CI checks pass, post to Slack as the relevant agent with:
 - Summary of what review feedback was addressed
