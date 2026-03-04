@@ -36,4 +36,7 @@ yarn build-storybook  # produces static build in storybook-static/
 - Import shared helpers from `~/storybooks` (e.g., `withTheme`, `mockCar`).
 - Add the `autodocs` tag to a story to generate automatic documentation pages.
 
+**Inspecting Storybook (agents):**
+Use the `/inspect-storybook` skill to browse the live Storybook before implementing any component or debugging a UI issue. It uses Playwright to open `localhost:6006`, navigate the sidebar, and report what already exists. This should be the first step for both the UI Agent and the Bug Fixer Agent when dealing with component work.
+
 <!--- End of Claude and agents instructions -->

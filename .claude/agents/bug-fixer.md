@@ -44,5 +44,6 @@ json.loads(urllib.request.urlopen(req).read())
 
 1. Post to Slack that you are investigating the bug.
 2. Consult `.claude/agents/architect.md` if you need context about the intended design or expected behaviour.
-3. Trace and fix the bug. Keep changes minimal.
-4. Post a summary to Slack: what was broken, what was fixed, files changed.
+3. **If the bug appears to be visual or component-related**, use the `/inspect-storybook` skill to inspect the component in isolation. This lets you determine whether the issue is a UI bug (wrong rendering, broken layout, bad props) or a data bug (bad state, wrong values passed in) — keeping both concerns separate.
+4. Trace and fix the bug. Keep changes minimal.
+5. Post a summary to Slack: what was broken, what was fixed, files changed.
