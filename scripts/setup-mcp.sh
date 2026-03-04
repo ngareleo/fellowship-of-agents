@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Configure MCP servers for fellowship-of-agents in ~/.claude.json.
-# Run once after cloning (and after `yarn install`).
+# Run once after cloning. No extra yarn/npm steps required.
 #
 # Servers configured:
 #   obsidian  — local stdio server backed by vault/ in this repo
@@ -12,16 +12,15 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+TOOLS_DIR="$REPO_ROOT/.claude/tools"
 
 echo "Configuring MCP servers for fellowship-of-agents..."
 echo ""
 
-# ── Obsidian ──────────────────────────────────────────────────────────────────
+# ── Find node ─────────────────────────────────────────────────────────────────
 
-# Find node: prefer PATH, fall back to NVM installations (newest first)
 NODE_BIN="$(command -v node 2>/dev/null || true)"
 if [ -z "$NODE_BIN" ]; then
-  # Glob may fail if NVM not installed — || true prevents pipefail exit
   NODE_BIN="$(ls -t "${NVM_DIR:-$HOME/.nvm}/versions/node"/*/bin/node 2>/dev/null | head -1 || true)"
 fi
 
@@ -30,10 +29,18 @@ if [ -z "$NODE_BIN" ]; then
   exit 1
 fi
 
-SERVER_JS="$REPO_ROOT/node_modules/@mauricio.wolff/mcp-obsidian/dist/server.js"
+NPM_BIN="$(dirname "$NODE_BIN")/npm"
+
+# ── Install mcp-obsidian into .claude/tools/ ─────────────────────────────────
+
+SERVER_JS="$TOOLS_DIR/node_modules/@mauricio.wolff/mcp-obsidian/dist/server.js"
+
 if [ ! -f "$SERVER_JS" ]; then
-  echo "Error: mcp-obsidian package not found. Run 'yarn install' first." >&2
-  exit 1
+  echo "Installing @mauricio.wolff/mcp-obsidian into .claude/tools/..."
+  mkdir -p "$TOOLS_DIR"
+  PATH="$(dirname "$NODE_BIN"):$PATH" \
+    "$NPM_BIN" install --prefix "$TOOLS_DIR" --save-exact \
+    @mauricio.wolff/mcp-obsidian@0.8.1 2>/dev/null
 fi
 
 VAULT_PATH="$REPO_ROOT/vault"
