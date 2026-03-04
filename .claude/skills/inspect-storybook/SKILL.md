@@ -29,10 +29,9 @@ REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 cd "$REPO_ROOT" && yarn storybook &
 ```
 
-Then wait for it to be ready:
+Then wait for it to be ready (polls every 2 s, up to 60 s):
 
 ```bash
-# Wait up to ~60 seconds for Storybook to be ready
 for i in {1..30}; do
   status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:6006 || echo "000")
   if [ "$status" -eq 200 ]; then
@@ -72,13 +71,20 @@ Click on each relevant story to inspect it:
 
 ### Step 4 — Check the source files
 
-For each component found in Storybook, locate its source:
+For each component found in Storybook, locate its story file by searching for the component or story title from `$ARGUMENTS`:
 
 ```bash
-find src/components -name "*.tsx" | head -30
+# Find story files matching the component name
+grep -rl "$ARGUMENTS" src --include="*.stories.ts" --include="*.stories.tsx" -i
 ```
 
-Read the component file and its story file to understand:
+If nothing matches, list all story files and pick the relevant ones:
+
+```bash
+find src -name "*.stories.ts" -o -name "*.stories.tsx"
+```
+
+Read the story file first, then follow its import to the component source. Understand:
 - Props interface
 - Variants / states it supports
 - How it is currently used
