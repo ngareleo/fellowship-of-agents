@@ -67,19 +67,30 @@ Based on the issue type, scan and read the files most likely to be touched:
 
 Use `Glob` and `Grep` to locate the exact files, then `Read` them.
 
-### Step 7 — Confirm understanding
+### Step 7 — Check the Obsidian vault for existing design docs
+
+Before writing any code, search the vault for prior design decisions related to this issue. Use the `/read-doc` skill with the issue title or topic as the query. This surfaces any approved approaches, conventions, or open questions from previous design sessions.
+
+### Step 8 — Confirm understanding
 
 Print a brief summary back to the user covering:
 
 1. **What the issue asks for** — one or two sentences.
 2. **Files likely to be modified** — a short list.
-3. **Open questions** — anything unclear before starting work (missing context, ambiguous requirements, potential conflicts with other open issues).
+3. **Design docs found** — any relevant vault documents and their key decisions.
+4. **Open questions** — anything unclear before starting work (missing context, ambiguous requirements, potential conflicts with other open issues).
 
-Do not begin implementing until the user confirms or answers any open questions.
+**If there are significant open questions that cannot be resolved from existing docs or code**, do not guess. Instead:
+
+- Use the `/write-doc` skill to create a design document exploring the options.
+- Post the doc link to Slack and tag `@architect` for review.
+- **Stop work** — the team lead will re-spawn you once a decision is made.
+
+Only begin implementing once all open questions are resolved.
 
 ---
 
-### Step 8 — Open a PR
+### Step 10 — Open a PR
 
 When implementation is complete, create the pull request:
 
@@ -100,7 +111,7 @@ EOF
 
 Note the PR number returned — you will need it in the next step.
 
-### Step 9 — Confirm CI checks are green
+### Step 11 — Confirm CI checks are green
 
 Wait for all GitHub Actions checks on the PR to complete:
 
@@ -117,7 +128,7 @@ gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents
 gh run view --repo ngareleo/fellowship-of-agents --log-failed
 ```
 
-### Step 10 — Mark ready for review and notify
+### Step 12 — Mark ready for review and notify
 
 Once all CI checks pass:
 
