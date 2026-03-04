@@ -28,9 +28,8 @@ If the user specifies an unknown channel, use the Bash tool to look it up:
 
 ```bash
 python3 -c "
-import urllib.request, json
-token = open('/home/leo/.zshrc').read()
-import re
+import urllib.request, json, re, os
+token = open(os.path.expanduser('~/.zshrc')).read()
 token = re.search(r'SLACK_BOT_TOKEN=\"([^\"]+)\"', token).group(1)
 req = urllib.request.Request(
     'https://slack.com/api/conversations.list?types=public_channel,private_channel&limit=200',
@@ -48,8 +47,8 @@ Use this exact Python snippet to post the message:
 
 ```bash
 python3 -c "
-import urllib.request, json, re
-src = open('/home/leo/.zshrc').read()
+import urllib.request, json, re, os
+src = open(os.path.expanduser('~/.zshrc')).read()
 token = re.search(r'SLACK_BOT_TOKEN=\"([^\"]+)\"', src).group(1)
 payload = json.dumps({'channel': '<CHANNEL_ID>', 'text': '<MESSAGE>'}).encode()
 req = urllib.request.Request(

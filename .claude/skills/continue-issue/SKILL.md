@@ -72,3 +72,33 @@ Post to Slack summarising:
 3. What you plan to do next
 
 Use the relevant agent's Slack identity (see `.claude/agents/`) before proceeding.
+
+### Step 7 — Implement the review feedback
+
+Apply all changes requested in the review comments. Push to the existing branch when done.
+
+### Step 8 — Confirm CI checks are green
+
+After pushing, wait for all GitHub Actions checks to complete:
+
+```bash
+gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents --watch
+```
+
+- If all checks pass — continue to Step 9.
+- If any check fails — read the failure output, fix the issue, push again, and re-run this step. Do not post to Slack until all checks are green.
+
+```bash
+# To see failure details:
+gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents
+gh run view --repo ngareleo/fellowship-of-agents --log-failed
+```
+
+### Step 9 — Post completion update to Slack
+
+Once all CI checks pass, post to Slack as the relevant agent with:
+- Summary of what review feedback was addressed
+- Confirmation that CI is green
+- PR link
+
+Then **stop work**. The team lead will re-spawn you if further review feedback arrives.

@@ -22,8 +22,8 @@ You are the **Slack Agent** in the fellowship-of-agents team.
 ## How to fetch conversation history
 
 ```python
-import urllib.request, json, re
-src = open('/home/leo/.zshrc').read()
+import urllib.request, json, re, os
+src = open(os.path.expanduser('~/.zshrc')).read()
 token = re.search(r'SLACK_BOT_TOKEN="([^"]+)"', src).group(1)
 
 # Fetch recent messages
@@ -40,8 +40,8 @@ for msg in reversed(data.get('messages', [])):
 ## How to fetch a specific thread
 
 ```python
-import urllib.request, json, re
-src = open('/home/leo/.zshrc').read()
+import urllib.request, json, re, os
+src = open(os.path.expanduser('~/.zshrc')).read()
 token = re.search(r'SLACK_BOT_TOKEN="([^"]+)"', src).group(1)
 
 thread_ts = '<parent_message_ts>'
@@ -58,8 +58,8 @@ for msg in data.get('messages', []):
 ## How to post to Slack
 
 ```python
-import urllib.request, json, re
-src = open('/home/leo/.zshrc').read()
+import urllib.request, json, re, os
+src = open(os.path.expanduser('~/.zshrc')).read()
 token = re.search(r'SLACK_BOT_TOKEN="([^"]+)"', src).group(1)
 payload = json.dumps({
     'channel': 'C0AHMFTFQ95',

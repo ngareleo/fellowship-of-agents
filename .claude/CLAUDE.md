@@ -64,8 +64,8 @@ Use the `/check-slack` skill to read recent messages from `#all-agents`. Run it 
 Use the Slack API directly via Python (the MCP is unreliable). The `username` field overrides the bot display name for that message, enabling impersonation without spawning.
 
 ```python
-import urllib.request, json, re
-src = open('/home/leo/.zshrc').read()
+import urllib.request, json, re, os
+src = open(os.path.expanduser('~/.zshrc')).read()
 token = re.search(r'SLACK_BOT_TOKEN="([^"]+)"', src).group(1)
 payload = json.dumps({
     'channel': 'C0AHMFTFQ95',   # #all-agents

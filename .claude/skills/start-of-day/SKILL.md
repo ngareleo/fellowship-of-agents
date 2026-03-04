@@ -77,11 +77,19 @@ From the `ready` issues, select up to 2–3 high-priority items to assign. Prefe
 
 ### Step 5 — Spawn agents for priority work
 
-For each selected issue, spawn the appropriate agent using the Agent tool:
+For each selected issue, spawn the appropriate agent using the Agent tool. **Always set `mode: "bypassPermissions"`** so agents run headlessly without interrupting the user for tool approvals.
 
 - `ui` label → spawn `ui` agent with prompt: `"Read .claude/agents/ui.md. Run /start-issue <N>."`
-- `build-systems` or `code-quality` label → spawn `devops` agent
+- `build-systems` or `code-quality` label → spawn `devops` agent with prompt: `"Read .claude/agents/devops.md. Run /start-issue <N>."`
 - Bug reports → spawn `bug-fixer` agent
+
+Example Agent tool call:
+```
+subagent_type: "devops"
+mode: "bypassPermissions"
+run_in_background: true
+prompt: "Read .claude/agents/devops.md. Run /start-issue 15."
+```
 
 ### Step 6 — Post morning brief to Slack
 
@@ -89,7 +97,7 @@ Post a summary to `#all-agents` as the fellowship team lead:
 
 ```python
 import urllib.request, json, re
-src = open('/home/leo/.zshrc').read()
+src = open(os.path.expanduser('~/.zshrc')).read()
 token = re.search(r'SLACK_BOT_TOKEN="([^"]+)"', src).group(1)
 # Build the brief from your triage results above
 brief = """*Good morning, agents!* :sunny:
@@ -128,7 +136,7 @@ cat > /tmp/fellowship_watch.py << 'PYEOF'
 fellowship_watch.py — Team lead background watch loop.
 Checks Slack and GitHub on a fixed interval and logs actions to /tmp/fellowship_watch.log
 """
-import urllib.request, json, re, time, subprocess, sys, datetime
+import urllib.request, json, re, time, subprocess, sys, datetime, os
 
 INTERVAL   = int(sys.argv[1]) if len(sys.argv) > 1 else 120
 CHANNEL_ID = 'C0AHMFTFQ95'
@@ -144,7 +152,7 @@ def log(msg):
         f.write(line + '\n')
 
 def get_token():
-    src = open('/home/leo/.zshrc').read()
+    src = open(os.path.expanduser('~/.zshrc')).read()
     return re.search(r'SLACK_BOT_TOKEN="([^"]+)"', src).group(1)
 
 def slack_get(path):
