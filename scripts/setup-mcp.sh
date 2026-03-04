@@ -3,8 +3,9 @@
 # Run once after cloning. No extra yarn/npm steps required.
 #
 # Servers configured:
-#   obsidian  — local stdio server backed by vault/ in this repo
-#   figma     — remote HTTP server at https://mcp.figma.com/mcp
+#   obsidian    — local stdio server backed by vault/ in this repo
+#   figma       — remote HTTP server at https://mcp.figma.com/mcp
+#   playwright  — local stdio server for browser automation
 #
 # Usage:
 #   bash scripts/setup-mcp.sh
@@ -31,26 +32,36 @@ fi
 
 NPM_BIN="$(dirname "$NODE_BIN")/npm"
 
-# ── Install mcp-obsidian into .claude/tools/ ─────────────────────────────────
+# ── Install packages into .claude/tools/ ─────────────────────────────────────
+
+mkdir -p "$TOOLS_DIR"
 
 SERVER_JS="$TOOLS_DIR/node_modules/@mauricio.wolff/mcp-obsidian/dist/server.js"
 
 if [ ! -f "$SERVER_JS" ]; then
   echo "Installing @mauricio.wolff/mcp-obsidian into .claude/tools/..."
-  mkdir -p "$TOOLS_DIR"
   PATH="$(dirname "$NODE_BIN"):$PATH" \
     "$NPM_BIN" install --prefix "$TOOLS_DIR" --save-exact \
     @mauricio.wolff/mcp-obsidian@0.8.1 2>/dev/null
+fi
+
+PLAYWRIGHT_JS="$TOOLS_DIR/node_modules/@playwright/mcp/cli.js"
+
+if [ ! -f "$PLAYWRIGHT_JS" ]; then
+  echo "Installing @playwright/mcp into .claude/tools/..."
+  PATH="$(dirname "$NODE_BIN"):$PATH" \
+    "$NPM_BIN" install --prefix "$TOOLS_DIR" --save-exact \
+    @playwright/mcp 2>/dev/null
 fi
 
 VAULT_PATH="$REPO_ROOT/vault"
 
 # ── Write to ~/.claude.json ───────────────────────────────────────────────────
 
-python3 - "$NODE_BIN" "$SERVER_JS" "$VAULT_PATH" <<'EOF'
+python3 - "$NODE_BIN" "$SERVER_JS" "$VAULT_PATH" "$PLAYWRIGHT_JS" <<'EOF'
 import json, os, sys
 
-node_bin, server_js, vault_path = sys.argv[1], sys.argv[2], sys.argv[3]
+node_bin, server_js, vault_path, playwright_js = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
 
 config_path = os.path.expanduser("~/.claude.json")
 try:
@@ -72,13 +83,20 @@ config["mcpServers"]["figma"] = {
     "url": "https://mcp.figma.com/mcp",
 }
 
+config["mcpServers"]["playwright"] = {
+    "type": "stdio",
+    "command": node_bin,
+    "args": [playwright_js],
+}
+
 with open(config_path, "w") as f:
     json.dump(config, f, indent=2)
     f.write("\n")
 EOF
 
-echo "  ✓ obsidian  stdio  $VAULT_PATH"
-echo "  ✓ figma     http   https://mcp.figma.com/mcp"
+echo "  ✓ obsidian    stdio  $VAULT_PATH"
+echo "  ✓ figma       http   https://mcp.figma.com/mcp"
+echo "  ✓ playwright  stdio  $PLAYWRIGHT_JS"
 echo ""
 echo "Next steps:"
 echo "  • Figma: authenticate by running 'claude mcp auth figma'"
