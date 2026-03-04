@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Configure MCP servers for fellowship-of-agents in ~/.claude.json.
-# Run once after cloning. No extra yarn/npm steps required.
+# Run once after cloning. Requires Node.js (npx) to be installed.
 #
 # Servers configured:
 #   obsidian    — local stdio server backed by vault/ in this repo
@@ -13,55 +13,38 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TOOLS_DIR="$REPO_ROOT/.claude/tools"
+VAULT_PATH="$REPO_ROOT/vault"
 
 echo "Configuring MCP servers for fellowship-of-agents..."
 echo ""
 
-# ── Find node ─────────────────────────────────────────────────────────────────
+# ── Verify npx is available ────────────────────────────────────────────────────
 
-NODE_BIN="$(command -v node 2>/dev/null || true)"
-if [ -z "$NODE_BIN" ]; then
-  NODE_BIN="$(ls -t "${NVM_DIR:-$HOME/.nvm}/versions/node"/*/bin/node 2>/dev/null | head -1 || true)"
-fi
-
-if [ -z "$NODE_BIN" ]; then
-  echo "Error: node not found. Install Node.js (or NVM) then re-run this script." >&2
+if ! command -v npx &>/dev/null; then
+  echo "Error: npx not found. Install Node.js then re-run this script." >&2
   exit 1
 fi
 
-NPM_BIN="$(dirname "$NODE_BIN")/npm"
+# ── Install Playwright system dependencies ────────────────────────────────────
 
-# ── Install packages into .claude/tools/ ─────────────────────────────────────
-
-mkdir -p "$TOOLS_DIR"
-
-SERVER_JS="$TOOLS_DIR/node_modules/@mauricio.wolff/mcp-obsidian/dist/server.js"
-
-if [ ! -f "$SERVER_JS" ]; then
-  echo "Installing @mauricio.wolff/mcp-obsidian into .claude/tools/..."
-  PATH="$(dirname "$NODE_BIN"):$PATH" \
-    "$NPM_BIN" install --prefix "$TOOLS_DIR" --save-exact \
-    @mauricio.wolff/mcp-obsidian@0.8.1 2>/dev/null
+if command -v apt-get &>/dev/null; then
+  if ! dpkg -s libavif16 &>/dev/null 2>&1; then
+    echo "Installing Playwright system dependency: libavif16..."
+    sudo apt-get install -y libavif16
+  fi
 fi
 
-PLAYWRIGHT_JS="$TOOLS_DIR/node_modules/@playwright/mcp/cli.js"
+# ── Install Playwright browsers ───────────────────────────────────────────────
 
-if [ ! -f "$PLAYWRIGHT_JS" ]; then
-  echo "Installing @playwright/mcp into .claude/tools/..."
-  PATH="$(dirname "$NODE_BIN"):$PATH" \
-    "$NPM_BIN" install --prefix "$TOOLS_DIR" --save-exact \
-    @playwright/mcp 2>/dev/null
-fi
-
-VAULT_PATH="$REPO_ROOT/vault"
+echo "Installing Playwright browsers..."
+npx playwright install 2>/dev/null || true
 
 # ── Write to ~/.claude.json ───────────────────────────────────────────────────
 
-python3 - "$NODE_BIN" "$SERVER_JS" "$VAULT_PATH" "$PLAYWRIGHT_JS" <<'EOF'
+python3 - "$VAULT_PATH" <<'EOF'
 import json, os, sys
 
-node_bin, server_js, vault_path, playwright_js = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+vault_path = sys.argv[1]
 
 config_path = os.path.expanduser("~/.claude.json")
 try:
@@ -74,8 +57,8 @@ config.setdefault("mcpServers", {})
 
 config["mcpServers"]["obsidian"] = {
     "type": "stdio",
-    "command": node_bin,
-    "args": [server_js, vault_path],
+    "command": "npx",
+    "args": ["-y", "@mauricio.wolff/mcp-obsidian@0.8.1", vault_path],
 }
 
 config["mcpServers"]["figma"] = {
@@ -85,8 +68,8 @@ config["mcpServers"]["figma"] = {
 
 config["mcpServers"]["playwright"] = {
     "type": "stdio",
-    "command": node_bin,
-    "args": [playwright_js],
+    "command": "npx",
+    "args": ["-y", "@playwright/mcp", "--headless"],
 }
 
 with open(config_path, "w") as f:
@@ -94,9 +77,9 @@ with open(config_path, "w") as f:
     f.write("\n")
 EOF
 
-echo "  ✓ obsidian    stdio  $VAULT_PATH"
+echo "  ✓ obsidian    stdio  npx @mauricio.wolff/mcp-obsidian@0.8.1"
 echo "  ✓ figma       http   https://mcp.figma.com/mcp"
-echo "  ✓ playwright  stdio  $PLAYWRIGHT_JS"
+echo "  ✓ playwright  stdio  npx @playwright/mcp --headless"
 echo ""
 echo "Next steps:"
 echo "  • Figma: authenticate by running 'claude mcp auth figma'"
