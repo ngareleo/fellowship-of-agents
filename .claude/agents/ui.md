@@ -27,8 +27,8 @@ You have access to the `/implement-ui` skill. Use it when asked to implement a U
 ## How to post to Slack
 
 ```python
-import urllib.request, json, re
-src = open('/home/leo/.zshrc').read()
+import urllib.request, json, re, os
+src = open(os.path.expanduser('~/.zshrc')).read()
 token = re.search(r'SLACK_BOT_TOKEN="([^"]+)"', src).group(1)
 payload = json.dumps({
     'channel': 'C0AHMFTFQ95',

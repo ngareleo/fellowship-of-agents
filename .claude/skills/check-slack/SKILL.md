@@ -16,8 +16,8 @@ The optional argument `$ARGUMENTS` is the number of recent messages to fetch (de
 
 ```bash
 python3 -c "
-import urllib.request, json, re
-src = open('/home/leo/.zshrc').read()
+import urllib.request, json, re, os
+src = open(os.path.expanduser('~/.zshrc')).read()
 token = re.search(r'SLACK_BOT_TOKEN=\"([^\"]+)\"', src).group(1)
 limit = '$ARGUMENTS' if '$ARGUMENTS'.strip().isdigit() else '10'
 req = urllib.request.Request(

@@ -97,7 +97,7 @@ Post a summary to `#all-agents` as the fellowship team lead:
 
 ```python
 import urllib.request, json, re
-src = open('/home/dag/.zshrc').read()
+src = open(os.path.expanduser('~/.zshrc')).read()
 token = re.search(r'SLACK_BOT_TOKEN="([^"]+)"', src).group(1)
 # Build the brief from your triage results above
 brief = """*Good morning, agents!* :sunny:
@@ -136,7 +136,7 @@ cat > /tmp/fellowship_watch.py << 'PYEOF'
 fellowship_watch.py — Team lead background watch loop.
 Checks Slack and GitHub on a fixed interval and logs actions to /tmp/fellowship_watch.log
 """
-import urllib.request, json, re, time, subprocess, sys, datetime
+import urllib.request, json, re, time, subprocess, sys, datetime, os
 
 INTERVAL   = int(sys.argv[1]) if len(sys.argv) > 1 else 120
 CHANNEL_ID = 'C0AHMFTFQ95'
@@ -152,7 +152,7 @@ def log(msg):
         f.write(line + '\n')
 
 def get_token():
-    src = open('/home/dag/.zshrc').read()
+    src = open(os.path.expanduser('~/.zshrc')).read()
     return re.search(r'SLACK_BOT_TOKEN="([^"]+)"', src).group(1)
 
 def slack_get(path):
