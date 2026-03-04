@@ -192,3 +192,5 @@ Print a clear summary in this format:
 | N | ...   | ...      | #X, #Y |
 
 **Recommendation:** Pick the highest-priority `ready` item that unblocks the most downstream work. If two items share priority, prefer the one with more dependents.
+
+**UI assignment cap:** Assign **at most one `ui` issue** per dispatch cycle. Most pages share components, and multiple agents working on `ui` issues simultaneously risk duplicating or conflicting on the same building blocks. Pair the single `ui` issue with one `build-systems`, `code-quality`, or bug-fix item for the second agent slot.

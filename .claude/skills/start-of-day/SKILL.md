@@ -73,7 +73,13 @@ If there are untriaged issues, run `/triage` on them.
 
 ### Step 4 — Identify next work items
 
-From the `ready` issues, select up to 2–3 high-priority items to assign. Prefer issues with type labels (`ui`, `build-systems`, `code-quality`) that match available agents.
+From the `ready` issues, select items to assign following this rule:
+
+- **At most one `ui` issue** per dispatch cycle. Most pages share components; multiple agents working on UI simultaneously risk duplicating or conflicting on shared building blocks.
+- **Pair it with one non-UI item**: a `build-systems`, `code-quality`, or bug-fix issue for the second agent slot.
+- If no `ui` issue is ready, assign up to two non-UI items.
+
+Pick the highest-priority items within these constraints. Prefer issues that unblock the most downstream work.
 
 ### Step 5 — Spawn agents for priority work
 
@@ -82,6 +88,8 @@ For each selected issue, spawn the appropriate agent using the Agent tool. **Alw
 - `ui` label → spawn `ui` agent with prompt: `"Read .claude/agents/ui.md. Run /start-issue <N>."`
 - `build-systems` or `code-quality` label → spawn `devops` agent with prompt: `"Read .claude/agents/devops.md. Run /start-issue <N>."`
 - Bug reports → spawn `bug-fixer` agent
+
+**Never spawn more than one `ui` agent at a time.** If a `ui` agent is already running, skip additional `ui` issues and fill remaining slots with non-UI work.
 
 Example Agent tool call:
 ```
