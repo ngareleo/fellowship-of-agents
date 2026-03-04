@@ -111,26 +111,9 @@ EOF
 
 Note the PR number returned — you will need it in the next step.
 
-### Step 11 — Confirm CI checks are green
+### Step 11 — Mark ready for review and notify
 
-Wait for all GitHub Actions checks on the PR to complete:
-
-```bash
-gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents --watch
-```
-
-- If the command exits **successfully** (all checks green) — continue to Step 10.
-- If **any check fails** — read the failure output, fix the issue, push the fix, then re-run this step. Do not proceed to Step 10 until all checks are green.
-
-```bash
-# To see failure details:
-gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents
-gh run view --repo ngareleo/fellowship-of-agents --log-failed
-```
-
-### Step 12 — Mark ready for review and notify
-
-Once all CI checks pass:
+Immediately after opening the PR:
 
 1. Add the `pending_review` label to the issue:
 
@@ -142,8 +125,25 @@ gh issue edit $ARGUMENTS --repo ngareleo/fellowship-of-agents --add-label "pendi
    - PR link
    - Summary of what was done
    - What you need reviewed
-   - Confirmation that CI is green
+   - Note that CI checks are still running
 
-3. **Stop work.** Do not wait for a response. The team lead will re-spawn you via `/continue-issue` when the review is complete.
+### Step 12 — Confirm CI checks are green
+
+After posting to Slack, wait for all GitHub Actions checks on the PR to complete:
+
+```bash
+gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents --watch
+```
+
+- If the command exits **successfully** (all checks green) — post a follow-up Slack message confirming CI is green, then stop work.
+- If **any check fails** — read the failure output, fix the issue, push the fix, then re-run this step. Once green, post a follow-up Slack message and stop work.
+
+```bash
+# To see failure details:
+gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents
+gh run view --repo ngareleo/fellowship-of-agents --log-failed
+```
+
+**Stop work after CI is green.** Do not wait for a response. The team lead will re-spawn you via `/continue-issue` when the review is complete.
 
 > When the user responds on Slack (e.g. "@ui_agent I've reviewed your PR..."), the team lead will spawn you again. Use the `/continue-issue` skill to reload context from the previous session and act on the review feedback.
