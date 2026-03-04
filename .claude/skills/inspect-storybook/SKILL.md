@@ -3,7 +3,7 @@ name: inspect-storybook
 description: Inspect the running Storybook to discover existing components before building new ones
 disable-model-invocation: false
 argument-hint: "<component name or category to look for>"
-allowed-tools: Bash, Read, Glob, Grep, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_click, mcp__playwright__browser_wait_for, mcp__playwright__browser_take_screenshot
+allowed-tools: Bash, Read, Glob, Grep
 ---
 
 You are inspecting the project's Storybook to find existing components relevant to: `$ARGUMENTS`
