@@ -3,7 +3,7 @@ name: inspect-storybook
 description: Inspect the running Storybook to discover existing components before building new ones
 disable-model-invocation: false
 argument-hint: "<component name or category to look for>"
-allowed-tools: Bash, Read, Glob, Grep, mcp__playwright__browser_navigate, mcp__playwright__browser_snapshot, mcp__playwright__browser_click, mcp__playwright__browser_wait_for, mcp__playwright__browser_take_screenshot
+allowed-tools: Bash, Read, Glob, Grep
 ---
 
 You are inspecting the project's Storybook to find existing components relevant to: `$ARGUMENTS`
@@ -25,13 +25,21 @@ If it returns `200`, proceed to Step 2.
 If not running, start it in the background:
 
 ```bash
-cd /home/dag/Projects/fellowship-of-agents && yarn storybook &
+REPO_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+cd "$REPO_ROOT" && yarn storybook &
 ```
 
-Then wait for it to be ready:
+Then wait for it to be ready (polls every 2 s, up to 60 s):
 
 ```bash
-sleep 15 && curl -s -o /dev/null -w "%{http_code}" http://localhost:6006
+for i in {1..30}; do
+  status=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:6006 || echo "000")
+  if [ "$status" -eq 200 ]; then
+    echo "Storybook is ready (HTTP $status)"
+    break
+  fi
+  sleep 2
+done
 ```
 
 ---
@@ -63,13 +71,20 @@ Click on each relevant story to inspect it:
 
 ### Step 4 — Check the source files
 
-For each component found in Storybook, locate its source:
+For each component found in Storybook, locate its story file by searching for the component or story title from `$ARGUMENTS`:
 
 ```bash
-find src/components -name "*.tsx" | head -30
+# Find story files matching the component name
+grep -rl "$ARGUMENTS" src --include="*.stories.ts" --include="*.stories.tsx" -i
 ```
 
-Read the component file and its story file to understand:
+If nothing matches, list all story files and pick the relevant ones:
+
+```bash
+find src -name "*.stories.ts" -o -name "*.stories.tsx"
+```
+
+Read the story file first, then follow its import to the component source. Understand:
 - Props interface
 - Variants / states it supports
 - How it is currently used

@@ -34,11 +34,19 @@ cat docs/web_components.md
 
 ### Step 2 — Check for existing similar components
 
+First, use the `/inspect-storybook` skill to visually browse all registered components:
+
+```
+/inspect-storybook <component name or category>
+```
+
+This opens the live Storybook, shows rendered variants, and tells you exactly what exists — reusable as-is, needs modification, or must be built from scratch. Only after inspecting Storybook should you look at source files:
+
 ```bash
 ls src/components/
 ```
 
-Use Glob and Grep to find components similar to what you are building. Read them to understand established patterns before writing anything.
+Use Glob and Grep to read any components flagged by the Storybook inspection. Understand their props and patterns before writing anything.
 
 ### Step 3 — Plan the component hierarchy
 
