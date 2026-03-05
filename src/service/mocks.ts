@@ -1,5 +1,14 @@
 import { Car } from "~/types";
 
+/**
+ * Simulates an async service call that would normally hit a real API.
+ * Returns the mock car inventory wrapped in a Promise so consumers can
+ * treat it identically to a real fetch-based service.
+ */
+export function fetchCars(): Promise<Car[]> {
+  return Promise.resolve(mockCars);
+}
+
 export const mockCars: Car[] = [
   {
     id: "1",
