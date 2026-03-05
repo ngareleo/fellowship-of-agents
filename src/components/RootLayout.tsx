@@ -15,7 +15,7 @@ export function RootLayout() {
   }, [cars, setCars]);
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#f8fafc" }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
       <AppHeader
         onNavLinkClick={(href) => navigate(href)}
         onSignIn={() => navigate("/auth")}

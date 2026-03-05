@@ -20,6 +20,19 @@ We will be using React to create web components. Its important to isolate betwee
 
 <!--- Start of Claude and agents instructions -->
 
+### Storybook story requirement
+
+Every new component added to `src/components/` MUST have a corresponding Storybook story file named `<ComponentName>.stories.tsx` in the same directory. This is a hard requirement enforced during code review.
+
+A story file must:
+- Export a `default` meta object with `title: "Components/<ComponentName>"` and `component: <ComponentName>`.
+- Wrap stories in the `withTheme` decorator (imported from `~/storybooks`) so MUI renders correctly.
+- Export at least a `Default` story showing the component's baseline appearance.
+- Cover meaningful variants (e.g. different props, badge states, responsive viewports) so reviewers can visually verify the component behaviour without running the full app.
+- Use `argTypes` to wire interactive controls and `{ action: "handlerName" }` for callback props so the Storybook Actions panel captures events.
+
+Failing to include a story file for a new component is grounds for a PR rejection at review time.
+
 ### Components module structure
 
 All presentational components live in `src/components/`. Each component file should export both the component function and its props type. The barrel file `src/components/index.ts` re-exports everything so consumers use `~/components` as the import path.

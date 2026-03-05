@@ -1,5 +1,18 @@
 export { AppHeader } from './AppHeader';
 export type { AppHeaderProps, NavLink } from './AppHeader';
+export { AppFooter } from './AppFooter';
 export { CarCard } from './CarCard';
 export type { CarCardProps } from './CarCard';
+export { CategoryCard } from './CategoryCard';
+export type { CategoryCardProps } from './CategoryCard';
+export { DashboardHeader } from './DashboardHeader';
+export type { DashboardHeaderProps, DashboardHeaderNavLink } from './DashboardHeader';
+export { DashboardHero } from './DashboardHero';
+export type { DashboardHeroProps } from './DashboardHero';
+export { ListingCard } from './ListingCard';
+export type { ListingCardProps, ListingBadge } from './ListingCard';
 export { RootLayout } from './RootLayout';
+export { SectionHeader } from './SectionHeader';
+export type { SectionHeaderProps } from './SectionHeader';
+export { SellBanner } from './SellBanner';
+export type { SellBannerProps } from './SellBanner';

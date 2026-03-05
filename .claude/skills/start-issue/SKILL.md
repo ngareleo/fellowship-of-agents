@@ -111,26 +111,9 @@ EOF
 
 Note the PR number returned — you will need it in the next step.
 
-### Step 11 — Confirm CI checks are green
+### Step 11 — Mark ready for review and notify
 
-Wait for all GitHub Actions checks on the PR to complete:
-
-```bash
-gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents --watch
-```
-
-- If the command exits **successfully** (all checks green) — continue to Step 10.
-- If **any check fails** — read the failure output, fix the issue, push the fix, then re-run this step. Do not proceed to Step 10 until all checks are green.
-
-```bash
-# To see failure details:
-gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents
-gh run view --repo ngareleo/fellowship-of-agents --log-failed
-```
-
-### Step 12 — Mark ready for review and notify
-
-Once all CI checks pass:
+Immediately after opening the PR:
 
 1. Add the `pending_review` label to the issue:
 
@@ -142,8 +125,39 @@ gh issue edit $ARGUMENTS --repo ngareleo/fellowship-of-agents --add-label "pendi
    - PR link
    - Summary of what was done
    - What you need reviewed
-   - Confirmation that CI is green
+   - Note that CI checks are still running
 
-3. **Stop work.** Do not wait for a response. The team lead will re-spawn you via `/continue-issue` when the review is complete.
+### Step 12 — Wait for required CI checks
+
+After posting to Slack, wait only for the two required checks — **TypeScript type check** and **Storybook Publish**:
+
+```bash
+while true; do
+  output=$(gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents 2>/dev/null)
+  ts_state=$(echo "$output" | grep "TypeScript type check" | awk '{print $2}')
+  sb_state=$(echo "$output" | grep "Storybook Publish" | awk '{print $2}')
+  echo "TypeScript: $ts_state | Storybook: $sb_state"
+  if [[ "$ts_state" == "fail" || "$sb_state" == "fail" ]]; then
+    echo "A required check failed — fixing."
+    break
+  fi
+  if [[ "$ts_state" == "pass" && "$sb_state" == "pass" ]]; then
+    echo "Required checks passed."
+    break
+  fi
+  sleep 30
+done
+```
+
+- If both pass — post a follow-up Slack message confirming CI is green, then **stop work**.
+- If either fails — read the failure, fix and push, then re-run this step.
+
+```bash
+# To see failure details:
+gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents
+gh run view --repo ngareleo/fellowship-of-agents --log-failed
+```
+
+**Stop work once required checks are green.** The github-agent monitors the PR for reviews and merge conflicts and will alert the team lead. The team lead will re-spawn you via `/continue-issue` when a review is complete.
 
 > When the user responds on Slack (e.g. "@ui_agent I've reviewed your PR..."), the team lead will spawn you again. Use the `/continue-issue` skill to reload context from the previous session and act on the review feedback.

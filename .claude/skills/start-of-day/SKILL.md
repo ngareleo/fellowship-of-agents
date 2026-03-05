@@ -142,15 +142,19 @@ cat > /tmp/fellowship_watch.py << 'PYEOF'
 #!/usr/bin/env python3
 """
 fellowship_watch.py — Team lead background watch loop.
-Checks Slack and GitHub on a fixed interval and logs actions to /tmp/fellowship_watch.log
+Detects new user Slack messages and GitHub events, then alerts via:
+  - /tmp/fellowship_alerts.txt  (readable by Claude Code)
+  - notify-send desktop notification (wakes the user)
+Does NOT post back to Slack (that is circular and unhelpful).
 """
 import urllib.request, json, re, time, subprocess, sys, datetime, os
 
-INTERVAL   = int(sys.argv[1]) if len(sys.argv) > 1 else 120
+INTERVAL   = int(sys.argv[1]) if len(sys.argv) > 1 else 30
 CHANNEL_ID = 'C0AHMFTFQ95'
 REPO       = 'ngareleo/fellowship-of-agents'
 LOG_FILE   = '/tmp/fellowship_watch.log'
 STATE_FILE = '/tmp/fellowship_watch_state.json'
+ALERT_FILE = '/tmp/fellowship_alerts.txt'
 
 def log(msg):
     ts = datetime.datetime.now().isoformat(timespec='seconds')
@@ -158,6 +162,16 @@ def log(msg):
     print(line, flush=True)
     with open(LOG_FILE, 'a') as f:
         f.write(line + '\n')
+
+def alert(msg):
+    """Write to alert file and fire a desktop notification."""
+    ts = datetime.datetime.now().isoformat(timespec='seconds')
+    with open(ALERT_FILE, 'a') as f:
+        f.write(f'[{ts}] {msg}\n')
+    try:
+        subprocess.run(['notify-send', 'Fellowship Team Lead', msg, '--urgency=critical'], timeout=5)
+    except Exception:
+        pass
 
 def get_token():
     src = open(os.path.expanduser('~/.zshrc')).read()
@@ -171,21 +185,6 @@ def slack_get(path):
     )
     return json.loads(urllib.request.urlopen(req).read())
 
-def slack_post(text):
-    token = get_token()
-    payload = json.dumps({
-        'channel': CHANNEL_ID,
-        'text': text,
-        'username': 'Fellowship Team Lead',
-        'icon_emoji': ':ring:',
-    }).encode()
-    req = urllib.request.Request(
-        'https://slack.com/api/chat.postMessage',
-        data=payload,
-        headers={'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json'}
-    )
-    return json.loads(urllib.request.urlopen(req).read())
-
 def load_state():
     try:
         return json.load(open(STATE_FILE))
@@ -196,7 +195,6 @@ def save_state(state):
     json.dump(state, open(STATE_FILE, 'w'))
 
 def check_slack(state):
-    """Check for new messages in #all-agents since last run."""
     data = slack_get(f'conversations.history?channel={CHANNEL_ID}&limit=20')
     messages = data.get('messages', [])
     if not messages:
@@ -205,78 +203,75 @@ def check_slack(state):
     last_ts = state.get('last_slack_ts')
     new_messages = [m for m in messages if last_ts is None or m['ts'] > last_ts]
 
-    agent_mentions = {
-        'devops': ['@devops'],
-        'ui': ['@ui'],
-        'triage': ['@triage'],
-        'bug-fixer': ['@bug-fixer', '@bug_fixer'],
-        'architect': ['@architect'],
-        'slack-agent': ['@slack-agent', '@slack_agent'],
-    }
-
     for msg in reversed(new_messages):
+        # Skip bot messages — only alert on real user messages
+        if msg.get('bot_id') or msg.get('subtype'):
+            continue
         user = msg.get('username') or msg.get('user', 'unknown')
         text = msg.get('text', '')
-        # Skip bot messages
-        if msg.get('bot_id'):
-            continue
-        log(f'New message from {user}: {text[:80]}')
-        for agent, mentions in agent_mentions.items():
-            if any(m in text.lower() for m in mentions):
-                log(f'  → Mentions @{agent} — logged for routing (manual spawn required)')
-                slack_post(f':eyes: I see a message for @{agent}. Routing... (check Claude Code to spawn the agent)')
-                break
+        log(f'New user message from {user}: {text[:120]}')
+        alert(f'Slack message from {user}: {text[:100]}')
 
     if new_messages:
         state['last_slack_ts'] = new_messages[0]['ts']
     return state
 
 def check_new_github_issues(state):
-    """Check for newly opened GitHub issues."""
     try:
         result = subprocess.run(
-            ['bash', '-c', f'~/bin/gh issue list --repo {REPO} --state open --limit 20 --json number,title,createdAt,labels'],
+            ['/usr/bin/gh', 'issue', 'list', '--repo', REPO, '--state', 'open',
+             '--limit', '20', '--json', 'number,title,createdAt,labels'],
             capture_output=True, text=True
         )
         issues = json.loads(result.stdout)
         seen = set(state.get('seen_issues', []))
-        new_issues = [i for i in issues if str(i['number']) not in seen]
-        for issue in new_issues:
-            log(f'New issue #{issue["number"]}: {issue["title"]}')
-            slack_post(f':github: New issue #{issue["number"]}: *{issue["title"]}* — needs triage.')
-            seen.add(str(issue['number']))
+        for issue in issues:
+            if str(issue['number']) not in seen:
+                log(f'New issue #{issue["number"]}: {issue["title"]}')
+                alert(f'New GitHub issue #{issue["number"]}: {issue["title"]}')
+                seen.add(str(issue['number']))
         state['seen_issues'] = list(seen)
     except Exception as e:
         log(f'GitHub issue check failed: {e}')
     return state
 
 def check_merged_prs(state):
-    """Check for newly merged PRs and note them."""
     try:
         result = subprocess.run(
-            ['bash', '-c', f'~/bin/gh pr list --repo {REPO} --state merged --limit 10 --json number,title,mergedAt'],
+            ['/usr/bin/gh', 'pr', 'list', '--repo', REPO, '--state', 'merged',
+             '--limit', '10', '--json', 'number,title,mergedAt'],
             capture_output=True, text=True
         )
         prs = json.loads(result.stdout)
         seen = set(state.get('seen_prs', []))
-        new_merged = [p for p in prs if str(p['number']) not in seen]
-        for pr in new_merged:
-            log(f'PR #{pr["number"]} merged: {pr["title"]}')
-            slack_post(f':merged: PR #{pr["number"]} was merged: *{pr["title"]}* — check linked issues.')
-            seen.add(str(pr['number']))
+        for pr in prs:
+            if str(pr['number']) not in seen:
+                log(f'PR #{pr["number"]} merged: {pr["title"]}')
+                seen.add(str(pr['number']))
         state['seen_prs'] = list(seen)
     except Exception as e:
         log(f'GitHub PR check failed: {e}')
     return state
 
 def main():
-    log(f'Watch loop started. Interval: {INTERVAL}s. Log: {LOG_FILE}')
+    log(f'Watch loop started. Interval: {INTERVAL}s')
     state = load_state()
-    # Seed seen issues/PRs on first run without alerting
+
+    # Seed last_slack_ts on first run so restarts don't replay history
+    if state.get('last_slack_ts') is None:
+        try:
+            data = slack_get(f'conversations.history?channel={CHANNEL_ID}&limit=1')
+            msgs = data.get('messages', [])
+            if msgs:
+                state['last_slack_ts'] = msgs[0]['ts']
+        except Exception:
+            pass
+
     if not state['seen_issues']:
         try:
             result = subprocess.run(
-                ['bash', '-c', f'~/bin/gh issue list --repo {REPO} --state open --limit 50 --json number'],
+                ['/usr/bin/gh', 'issue', 'list', '--repo', REPO, '--state', 'open',
+                 '--limit', '50', '--json', 'number'],
                 capture_output=True, text=True
             )
             state['seen_issues'] = [str(i['number']) for i in json.loads(result.stdout)]
@@ -285,7 +280,8 @@ def main():
     if not state['seen_prs']:
         try:
             result = subprocess.run(
-                ['bash', '-c', f'~/bin/gh pr list --repo {REPO} --state merged --limit 20 --json number'],
+                ['/usr/bin/gh', 'pr', 'list', '--repo', REPO, '--state', 'merged',
+                 '--limit', '20', '--json', 'number'],
                 capture_output=True, text=True
             )
             state['seen_prs'] = [str(p['number']) for p in json.loads(result.stdout)]
@@ -313,13 +309,25 @@ echo "Watch script written to /tmp/fellowship_watch.py"
 ### Step 8 — Launch the watch loop in the background
 
 ```bash
-INTERVAL="${ARGUMENTS:-120}"
+INTERVAL="${ARGUMENTS:-30}"
 nohup python3 /tmp/fellowship_watch.py "$INTERVAL" >> /tmp/fellowship_watch.log 2>&1 &
 WATCH_PID=$!
 echo "Watch loop started with PID $WATCH_PID (interval: ${INTERVAL}s)"
-echo "  Log:   tail -f /tmp/fellowship_watch.log"
-echo "  Stop:  kill $WATCH_PID"
+echo "  Log:     tail -f /tmp/fellowship_watch.log"
+echo "  Alerts:  cat /tmp/fellowship_alerts.txt"
+echo "  Stop:    kill $WATCH_PID"
 echo $WATCH_PID > /tmp/fellowship_watch.pid
+```
+
+### Step 8b — Launch the github-agent
+
+Spawn the github-agent to monitor open PRs for reviews, merge conflicts, and merges:
+
+```
+subagent_type: general-purpose
+mode: bypassPermissions
+run_in_background: true
+prompt: "Read .claude/agents/github-agent.md and follow its instructions to write and launch the polling script, then stop."
 ```
 
 ### Step 9 — Confirm to the user
@@ -327,21 +335,26 @@ echo $WATCH_PID > /tmp/fellowship_watch.pid
 Report back:
 - Summary of triage results (ready / blocked / untriaged counts)
 - Which agents were spawned and for which issues
-- Watch loop PID and how to monitor it (`tail -f /tmp/fellowship_watch.log`)
-- How to stop the watch loop (`kill $(cat /tmp/fellowship_watch.pid)`)
+- Watch loop PID, alert file, and log locations
+- GitHub agent PID and log
+- How to stop both loops
+
 
 ---
 
-## Stopping the watch loop
-
-To stop the background watch at any time:
+## Monitoring and stopping
 
 ```bash
+# Check pending alerts (new Slack messages / GitHub events missed while idle)
+cat /tmp/fellowship_alerts.txt
+
+# Tail live activity
+tail -f /tmp/fellowship_watch.log
+tail -f /tmp/github_agent.log
+
+# Stop watch loop
 kill $(cat /tmp/fellowship_watch.pid) && echo "Watch loop stopped"
-```
 
-To check what the watch loop has been doing:
-
-```bash
-tail -50 /tmp/fellowship_watch.log
+# Stop github agent
+kill $(cat /tmp/github_agent.pid) && echo "GitHub agent stopped"
 ```
