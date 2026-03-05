@@ -49,7 +49,7 @@ export function AuthPage({
   const [activeTab, setActiveTab] = useState<AuthTab>(initialTab);
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "#f8fafc" }}>
+    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: (t) => t.palette.background.default }}>
       {/* Left hero panel — hidden on mobile */}
       <AuthHeroPanel />
 
@@ -83,7 +83,7 @@ export function AuthPage({
               sx={{
                 width: 40,
                 height: 40,
-                bgcolor: "#2563eb",
+                bgcolor: (t) => t.palette.primary.main,
                 borderRadius: "8px",
                 display: "flex",
                 alignItems: "center",
@@ -98,7 +98,7 @@ export function AuthPage({
                 fontFamily: "'Barlow', sans-serif",
                 fontWeight: 700,
                 fontSize: 24,
-                color: "#0f172a",
+                color: (t) => t.palette.text.primary,
                 lineHeight: 1,
               }}
             >
@@ -112,13 +112,13 @@ export function AuthPage({
               fontFamily: "'Barlow', sans-serif",
               fontSize: 32,
               lineHeight: "38.4px",
-              color: "#0f172a",
+              color: (t) => t.palette.text.primary,
               mb: 0.75,
             }}
           >
             {activeTab === "signin" ? "Welcome Back" : "Create Account"}
           </Typography>
-          <Typography sx={{ fontSize: 14, color: "#64748b", mb: 3 }}>
+          <Typography sx={{ fontSize: 14, color: (t) => t.palette.text.secondary, mb: 3 }}>
             {activeTab === "signin"
               ? "Sign in to access your account and manage your listings."
               : "Join AutoExchange and start browsing or listing cars today."}
@@ -129,20 +129,20 @@ export function AuthPage({
             value={activeTab}
             onChange={(_, value: AuthTab) => setActiveTab(value)}
             sx={{
-              borderBottom: "2px solid #e2e8f0",
+              borderBottom: (t) => `2px solid ${t.palette.custom.divider}`,
               mb: 3,
               "& .MuiTabs-indicator": {
-                bgcolor: "#2563eb",
+                bgcolor: (t) => t.palette.primary.main,
                 height: 2,
               },
               "& .MuiTab-root": {
                 textTransform: "none",
                 fontSize: 14,
                 fontWeight: 600,
-                color: "#64748b",
+                color: (t) => t.palette.text.secondary,
                 flex: 1,
                 minHeight: 53,
-                "&.Mui-selected": { color: "#2563eb" },
+                "&.Mui-selected": { color: (t) => t.palette.primary.main },
               },
             }}
           >
@@ -178,7 +178,7 @@ export function AuthPage({
 
           {/* Footer link */}
           <Typography
-            sx={{ fontSize: 14, color: "#64748b", textAlign: "center", mt: 3 }}
+            sx={{ fontSize: 14, color: (t) => t.palette.text.secondary, textAlign: "center", mt: 3 }}
           >
             {activeTab === "signin" ? (
               <>
@@ -188,7 +188,7 @@ export function AuthPage({
                   onClick={() => setActiveTab("signup")}
                   sx={{
                     fontWeight: 500,
-                    color: "#2563eb",
+                    color: (t) => t.palette.primary.main,
                     cursor: "pointer",
                     "&:hover": { textDecoration: "underline" },
                   }}
@@ -204,7 +204,7 @@ export function AuthPage({
                   onClick={() => setActiveTab("signin")}
                   sx={{
                     fontWeight: 500,
-                    color: "#2563eb",
+                    color: (t) => t.palette.primary.main,
                     cursor: "pointer",
                     "&:hover": { textDecoration: "underline" },
                   }}

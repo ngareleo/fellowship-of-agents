@@ -23,7 +23,8 @@ export function AuthHeroPanel({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(139.7deg, #0f172a 14.645%, #334155 85.355%)",
+        background: (t) =>
+          `linear-gradient(139.7deg, ${t.palette.custom.navbarBg} 14.645%, ${t.palette.custom.heroPanelGradientEnd} 85.355%)`,
         minHeight: "100vh",
         px: 6,
         textAlign: "center",
@@ -37,7 +38,7 @@ export function AuthHeroPanel({
           fontFamily: "'Barlow', sans-serif",
           fontSize: 40,
           lineHeight: "48px",
-          color: "#ffffff",
+          color: (t) => t.palette.primary.contrastText,
           mb: 2,
         }}
       >
@@ -47,7 +48,7 @@ export function AuthHeroPanel({
         sx={{
           fontSize: 18,
           lineHeight: "27px",
-          color: "#cbd5e1",
+          color: (t) => t.palette.custom.checkboxUnchecked,
           maxWidth: 400,
         }}
       >

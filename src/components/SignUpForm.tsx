@@ -10,6 +10,7 @@ import {
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
+import type { Theme } from "@mui/material/styles";
 
 export type SignUpFormValues = {
   fullName: string;
@@ -66,19 +67,31 @@ export function SignUpForm({
     "& .MuiOutlinedInput-root": {
       borderRadius: "8px",
       height: 53,
-      "& fieldset": { borderColor: "#e2e8f0", borderWidth: 2 },
-      "&:hover fieldset": { borderColor: "#94a3b8" },
-      "&.Mui-focused fieldset": { borderColor: "#2563eb" },
+      "& fieldset": {
+        borderColor: (t: Theme) => t.palette.custom.divider,
+        borderWidth: 2,
+      },
+      "&:hover fieldset": {
+        borderColor: (t: Theme) => t.palette.custom.cardImagePlaceholder,
+      },
+      "&.Mui-focused fieldset": {
+        borderColor: (t: Theme) => t.palette.primary.main,
+      },
     },
-    "& input": { fontSize: 14, color: "#0f172a" },
-    "& input::placeholder": { color: "#94a3b8" },
+    "& input": {
+      fontSize: 14,
+      color: (t: Theme) => t.palette.text.primary,
+    },
+    "& input::placeholder": {
+      color: (t: Theme) => t.palette.custom.cardImagePlaceholder,
+    },
   };
 
   const labelSx = {
     display: "block",
     fontSize: 14,
     fontWeight: 500,
-    color: "#334155",
+    color: (t: Theme) => t.palette.custom.labelText,
     mb: 0.75,
   };
 
@@ -90,9 +103,9 @@ export function SignUpForm({
           <Typography
             sx={{
               fontSize: 14,
-              color: "#ef4444",
-              bgcolor: "#fef2f2",
-              border: "1px solid #fecaca",
+              color: (t) => t.palette.custom.errorText,
+              bgcolor: (t) => t.palette.custom.errorBg,
+              border: (t) => `1px solid ${t.palette.custom.errorBorder}`,
               borderRadius: "8px",
               px: 2,
               py: 1.5,
@@ -162,7 +175,7 @@ export function SignUpForm({
                     onClick={() => setShowPassword((prev) => !prev)}
                     edge="end"
                     size="small"
-                    sx={{ color: "#94a3b8" }}
+                    sx={{ color: (t) => t.palette.custom.cardImagePlaceholder }}
                   >
                     {showPassword ? (
                       <VisibilityOffIcon sx={{ fontSize: 20 }} />
@@ -199,7 +212,7 @@ export function SignUpForm({
                     onClick={() => setShowConfirm((prev) => !prev)}
                     edge="end"
                     size="small"
-                    sx={{ color: "#94a3b8" }}
+                    sx={{ color: (t) => t.palette.custom.cardImagePlaceholder }}
                   >
                     {showConfirm ? (
                       <VisibilityOffIcon sx={{ fontSize: 20 }} />
@@ -221,16 +234,16 @@ export function SignUpForm({
           fullWidth
           disabled={loading}
           sx={{
-            bgcolor: "#2563eb",
-            color: "#ffffff",
+            bgcolor: (t) => t.palette.primary.main,
+            color: (t) => t.palette.primary.contrastText,
             fontWeight: 600,
             fontSize: 14,
             borderRadius: "8px",
             height: 49,
             textTransform: "none",
             boxShadow: "none",
-            "&:hover": { bgcolor: "#1d4ed8", boxShadow: "none" },
-            "&:disabled": { bgcolor: "#93c5fd" },
+            "&:hover": { bgcolor: (t) => t.palette.primary.dark, boxShadow: "none" },
+            "&:disabled": { bgcolor: (t) => t.palette.custom.primaryDisabled },
           }}
         >
           {loading ? "Creating account…" : "Create Account"}
@@ -238,11 +251,11 @@ export function SignUpForm({
 
         {/* Divider */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <Box sx={{ flex: 1, height: 1, bgcolor: "#e2e8f0" }} />
-          <Typography sx={{ fontSize: 13, color: "#64748b", whiteSpace: "nowrap" }}>
+          <Box sx={{ flex: 1, height: 1, bgcolor: (t) => t.palette.custom.divider }} />
+          <Typography sx={{ fontSize: 13, color: (t) => t.palette.text.secondary, whiteSpace: "nowrap" }}>
             or continue with
           </Typography>
-          <Box sx={{ flex: 1, height: 1, bgcolor: "#e2e8f0" }} />
+          <Box sx={{ flex: 1, height: 1, bgcolor: (t) => t.palette.custom.divider }} />
         </Box>
 
         {/* Social buttons */}
@@ -258,14 +271,18 @@ export function SignUpForm({
             }
             sx={{
               height: 49,
-              borderColor: "#e2e8f0",
+              borderColor: (t) => t.palette.custom.divider,
               borderWidth: 2,
               borderRadius: "8px",
-              color: "#334155",
+              color: (t) => t.palette.custom.labelText,
               fontWeight: 500,
               fontSize: 14,
               textTransform: "none",
-              "&:hover": { borderColor: "#94a3b8", bgcolor: "#f8fafc", borderWidth: 2 },
+              "&:hover": {
+                borderColor: (t) => t.palette.custom.cardImagePlaceholder,
+                bgcolor: (t) => t.palette.background.default,
+                borderWidth: 2,
+              },
             }}
           >
             Google
@@ -281,14 +298,18 @@ export function SignUpForm({
             }
             sx={{
               height: 49,
-              borderColor: "#e2e8f0",
+              borderColor: (t) => t.palette.custom.divider,
               borderWidth: 2,
               borderRadius: "8px",
-              color: "#334155",
+              color: (t) => t.palette.custom.labelText,
               fontWeight: 500,
               fontSize: 14,
               textTransform: "none",
-              "&:hover": { borderColor: "#94a3b8", bgcolor: "#f8fafc", borderWidth: 2 },
+              "&:hover": {
+                borderColor: (t) => t.palette.custom.cardImagePlaceholder,
+                bgcolor: (t) => t.palette.background.default,
+                borderWidth: 2,
+              },
             }}
           >
             Facebook
