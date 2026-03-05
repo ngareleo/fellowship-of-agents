@@ -1,0 +1,39 @@
+{/* src/pages/CarDetailPage.mdx */}
+
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import * as CarDetailPageStories from "./CarDetailPage.stories";
+
+<Meta of={CarDetailPageStories} />
+
+# CarDetailPage
+
+The detail view for a single vehicle listing, served at `/cars/:id`. It reads the `id` route
+parameter from the URL and will display full information about the selected car once the data layer
+is wired up.
+
+## Usage
+
+<Canvas of={CarDetailPageStories.Default} />
+
+## Route parameter
+
+The page is rendered inside a React Router `<Route path="/cars/:id">`. It reads the param with:
+
+```tsx
+const { id } = useParams<{ id: string }>();
+```
+
+The `id` value corresponds to `Car.id` in the application data model and is passed by `CarCard`'s
+`onViewDetails` callback.
+
+## Long ID variant
+
+<Canvas of={CarDetailPageStories.LongId} />
+
+## Design notes
+
+- `CarDetailPage` is currently a scaffold — the heading and placeholder text will be replaced with
+  a full layout (images, specs, seller info, CTA) in a future issue.
+- The page uses `Container maxWidth="lg"` consistent with other pages.
+- The component must be wrapped in a router context (via `createRoutesStub` in Storybook or the
+  real `BrowserRouter` in the app) for `useParams` to work correctly.
