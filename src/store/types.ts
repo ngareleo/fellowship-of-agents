@@ -1,4 +1,4 @@
-import { CarsSlice } from "~/store/slices/cars.slice";
-import { FiltersSlice } from "~/store/slices/filters.slice";
+import { CarsSlice } from "./slices/cars.slice";
+import { FiltersSlice } from "./slices/filters.slice";
 
 export type StoreState = CarsSlice & FiltersSlice;

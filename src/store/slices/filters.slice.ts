@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
 import { FuelType, Transmission } from "~/types";
-import { StoreState } from "~/store/types";
+import { StoreState } from "../types";
 
 export type FiltersSlice = {
   filters: {
