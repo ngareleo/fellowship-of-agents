@@ -17,6 +17,7 @@ Work through these steps in order.
 The project uses **React** with **Material UI (MUI)** exclusively. Key rules from `docs/web_components.md`:
 
 - **Styling**: Use MUI's `sx` prop for all styling. No Tailwind, no inline `style` objects, no other CSS libraries.
+- **Theming**: All colour values must come from the MUI theme — never write hardcoded hex literals or CSS colour functions in component files. Use the `sx` callback pattern (`sx={{ color: (t) => t.palette.text.secondary }}`) or `useTheme()` for imperative access. Refer to `src/theme/README.md` for the full token inventory (palette, typography, shape) and usage examples. If a token for the colour you need is missing, add it per the "Adding new custom tokens" instructions in that file.
 - **Layout**: Prefer MUI layout primitives (`Box`, `Stack`) over custom divs.
 - **Structure**: App → Pages → Sections → Components. Components are the building blocks.
 - **Separation**: Keep presentation and data separate. All presentational components go in `src/components/`.
@@ -70,6 +71,7 @@ Surface the question before proceeding.
 Build the component following the rules from Step 1:
 
 - MUI `sx` prop for styling — no exceptions
+- Theme tokens for all colours — use `sx` callbacks or `useTheme()`; never hardcode hex values (see `src/theme/README.md`)
 - Composable and focused — if it grows large, split it
 - Export the component and its props type
 - Add to `src/components/index.ts`

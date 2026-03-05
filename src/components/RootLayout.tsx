@@ -6,7 +6,7 @@ export function RootLayout() {
   const navigate = useNavigate();
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#f8fafc" }}>
+    <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
       <AppHeader
         onNavLinkClick={(href) => navigate(href)}
         onSignIn={() => navigate("/auth")}
