@@ -12,6 +12,17 @@ For testing our components, we use [storybook](https://storybook.js.org/docs) te
 
 <!--- Start of Claude and agents instructions -->
 
+## ESLint Setup (issue #59)
+
+- ESLint v9 is configured using the flat config format (`eslint.config.js`).
+- Plugins installed: `eslint-plugin-react-hooks`, `eslint-plugin-import-x`, `typescript-eslint`, `eslint-import-resolver-typescript`.
+- `react-hooks/rules-of-hooks` is an error; `react-hooks/exhaustive-deps` is a warning.
+- Import ordering is enforced: external packages first, then `~/` (internal) imports, then relative imports.
+- `_`-prefixed unused variables are allowed (intentionally ignored params/destructured values).
+- Stories and test files have `@typescript-eslint/no-explicit-any` relaxed.
+- CI: `.github/workflows/eslint.yml` runs `yarn lint` on every PR to `main`.
+- Run `yarn lint` to check, `yarn lint --fix` to auto-fix import order violations.
+
 ## React Router Setup (issue #2)
 
 - `react-router` v7 is installed as a production dependency.

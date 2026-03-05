@@ -1,3 +1,5 @@
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import {
   AppBar,
   Box,
@@ -7,8 +9,6 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 
 export type DashboardHeaderNavLink = {
   label: string;

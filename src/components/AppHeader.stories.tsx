@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mui/material";
-import { AppHeader } from "./AppHeader";
+import type { Meta, StoryObj } from "@storybook/react";
 import { withTheme } from "~/storybooks";
+import { AppHeader } from "./AppHeader";
 
 const meta: Meta<typeof AppHeader> = {
   title: "Components/AppHeader",

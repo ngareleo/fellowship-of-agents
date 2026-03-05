@@ -1,7 +1,7 @@
-import { Box, Button, Card, Chip, Typography } from "@mui/material";
-import SpeedIcon from "@mui/icons-material/Speed";
 import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import SpeedIcon from "@mui/icons-material/Speed";
+import { Box, Button, Card, Chip, Typography } from "@mui/material";
 
 export type ListingBadge =
   | { type: "featured" }
