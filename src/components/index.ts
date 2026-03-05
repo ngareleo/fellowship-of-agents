@@ -1,6 +1,12 @@
 export { AppHeader } from './AppHeader';
 export type { AppHeaderProps, NavLink } from './AppHeader';
 export { AppFooter } from './AppFooter';
+export { AuthHeroPanel } from './AuthHeroPanel';
+export type { AuthHeroPanelProps } from './AuthHeroPanel';
+export { SignInForm } from './SignInForm';
+export type { SignInFormProps, SignInFormValues, SignInFormError } from './SignInForm';
+export { SignUpForm } from './SignUpForm';
+export type { SignUpFormProps, SignUpFormValues, SignUpFormError } from './SignUpForm';
 export { CarCard } from './CarCard';
 export type { CarCardProps } from './CarCard';
 export { CategoryCard } from './CategoryCard';
