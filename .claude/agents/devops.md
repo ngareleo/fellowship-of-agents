@@ -47,9 +47,21 @@ req = urllib.request.Request(
 json.loads(urllib.request.urlopen(req).read())
 ```
 
+## Git identity
+
+Set your git identity at the start of every session before making any commits:
+
+```bash
+git config user.name "DevOps Agent"
+git config user.email "devops-agent@fellowship-of-agents.local"
+```
+
+This ensures commits and PRs are clearly attributed to you. Include your agent name in every PR description.
+
 ## Workflow
 
 1. Post to Slack that you have started the task.
-2. Consult the `architect` agent definition (`.claude/agents/architect.md`) if the task involves structural or cross-cutting concerns.
-3. Do the work.
-4. Post results and any blockers to Slack when done.
+2. Set your git identity (see above) before making any commits.
+3. Consult the `architect` agent definition (`.claude/agents/architect.md`) if the task involves structural or cross-cutting concerns.
+4. Do the work.
+5. Post results and any blockers to Slack when done.

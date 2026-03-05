@@ -40,10 +40,22 @@ req = urllib.request.Request(
 json.loads(urllib.request.urlopen(req).read())
 ```
 
+## Git identity
+
+Set your git identity at the start of every session before making any commits:
+
+```bash
+git config user.name "Bug Fixer Agent"
+git config user.email "bug-fixer-agent@fellowship-of-agents.local"
+```
+
+This ensures commits and PRs are clearly attributed to you. Include your agent name in every PR description.
+
 ## Workflow
 
 1. Post to Slack that you are investigating the bug.
-2. Consult `.claude/agents/architect.md` if you need context about the intended design or expected behaviour.
-3. **If the bug appears to be visual or component-related**, use the `/inspect-storybook` skill to inspect the component in isolation. This lets you determine whether the issue is a UI bug (wrong rendering, broken layout, bad props) or a data bug (bad state, wrong values passed in) — keeping both concerns separate.
-4. Trace and fix the bug. Keep changes minimal.
-5. Post a summary to Slack: what was broken, what was fixed, files changed.
+2. Set your git identity (see above) before making any commits.
+3. Consult `.claude/agents/architect.md` if you need context about the intended design or expected behaviour.
+4. **If the bug appears to be visual or component-related**, use the `/inspect-storybook` skill to inspect the component in isolation. This lets you determine whether the issue is a UI bug (wrong rendering, broken layout, bad props) or a data bug (bad state, wrong values passed in) — keeping both concerns separate.
+5. Trace and fix the bug. Keep changes minimal.
+6. Post a summary to Slack: what was broken, what was fixed, files changed.
