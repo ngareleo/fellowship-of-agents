@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { StoreState } from "~/store/types";
-import { createCarsSlice } from "~/store/slices/cars.slice";
-import { createFiltersSlice } from "~/store/slices/filters.slice";
+import { StoreState } from "./types";
+import { createCarsSlice } from "./slices/cars.slice";
+import { createFiltersSlice } from "./slices/filters.slice";
 
 export const useAppStore = create<StoreState>()((...args) => ({
   ...createCarsSlice(...args),

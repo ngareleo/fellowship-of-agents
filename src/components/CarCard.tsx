@@ -5,6 +5,7 @@ import {
   Chip,
   IconButton,
   Typography,
+  useTheme,
 } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import SpeedIcon from "@mui/icons-material/Speed";
@@ -27,6 +28,8 @@ export function CarCard({
   featured = false,
   isNew = false,
 }: CarCardProps) {
+  const theme = useTheme();
+
   const title = `${car.year} ${car.make} ${car.model}`;
   const formattedPrice = `$${car.price.toLocaleString()}`;
   const formattedMileage = `${car.mileage.toLocaleString()} mi`;
@@ -50,8 +53,7 @@ export function CarCard({
         sx={{
           position: "relative",
           height: 220,
-          background:
-            "linear-gradient(147deg, #f1f5f9 14.6%, #e2e8f0 85.4%)",
+          background: `linear-gradient(147deg, ${theme.palette.custom.cardImageGradientStart} 14.6%, ${theme.palette.custom.cardImageGradientEnd} 85.4%)`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -65,7 +67,11 @@ export function CarCard({
             sx={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         ) : (
-          <Typography sx={{ fontSize: 48, color: "#94a3b8" }}>🚙</Typography>
+          <Typography
+            sx={{ fontSize: 48, color: theme.palette.custom.cardImagePlaceholder }}
+          >
+            🚙
+          </Typography>
         )}
 
         {featured && (
@@ -76,8 +82,8 @@ export function CarCard({
               position: "absolute",
               top: 12,
               left: 12,
-              bgcolor: "#dbeafe",
-              color: "#2563eb",
+              bgcolor: theme.palette.custom.featuredBadgeBg,
+              color: theme.palette.custom.featuredBadgeText,
               fontWeight: 600,
               fontSize: 11,
               letterSpacing: "0.5px",
@@ -95,8 +101,8 @@ export function CarCard({
               position: "absolute",
               top: 12,
               right: 12,
-              bgcolor: "#ede9fe",
-              color: "#7c3aed",
+              bgcolor: theme.palette.secondary.light,
+              color: theme.palette.secondary.main,
               fontWeight: 600,
               fontSize: 11,
               letterSpacing: "0.5px",
@@ -112,7 +118,7 @@ export function CarCard({
         {/* Title */}
         <Typography
           sx={{
-            color: "#0f172a",
+            color: theme.palette.text.primary,
             fontSize: 18,
             fontWeight: 600,
             lineHeight: 1.3,
@@ -128,24 +134,36 @@ export function CarCard({
             display: "flex",
             gap: 2,
             mb: 1.5,
-            color: "#64748b",
+            color: theme.palette.text.secondary,
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <SpeedIcon sx={{ fontSize: 16, color: "#64748b" }} />
-            <Typography sx={{ fontSize: 13, color: "#64748b" }}>
+            <SpeedIcon
+              sx={{ fontSize: 16, color: theme.palette.text.secondary }}
+            />
+            <Typography
+              sx={{ fontSize: 13, color: theme.palette.text.secondary }}
+            >
               {formattedMileage}
             </Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <LocalGasStationIcon sx={{ fontSize: 16, color: "#64748b" }} />
-            <Typography sx={{ fontSize: 13, color: "#64748b" }}>
+            <LocalGasStationIcon
+              sx={{ fontSize: 16, color: theme.palette.text.secondary }}
+            />
+            <Typography
+              sx={{ fontSize: 13, color: theme.palette.text.secondary }}
+            >
               {fuelLabel}
             </Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-            <SettingsIcon sx={{ fontSize: 16, color: "#64748b" }} />
-            <Typography sx={{ fontSize: 13, color: "#64748b" }}>
+            <SettingsIcon
+              sx={{ fontSize: 16, color: theme.palette.text.secondary }}
+            />
+            <Typography
+              sx={{ fontSize: 13, color: theme.palette.text.secondary }}
+            >
               {transmissionLabel}
             </Typography>
           </Box>
@@ -154,7 +172,7 @@ export function CarCard({
         {/* Price */}
         <Typography
           sx={{
-            color: "#0f172a",
+            color: theme.palette.text.primary,
             fontSize: 24,
             fontWeight: 700,
             mb: 2,
@@ -170,15 +188,15 @@ export function CarCard({
             onClick={() => onViewDetails(car.id)}
             sx={{
               flex: 1,
-              bgcolor: "#2563eb",
-              color: "#ffffff",
+              bgcolor: theme.palette.primary.main,
+              color: theme.palette.primary.contrastText,
               fontWeight: 600,
               fontSize: 14,
               borderRadius: "8px",
               height: 45,
               textTransform: "none",
               "&:hover": {
-                bgcolor: "#1d4ed8",
+                bgcolor: theme.palette.primary.dark,
               },
             }}
           >
@@ -190,15 +208,17 @@ export function CarCard({
             sx={{
               width: 40,
               height: 40,
-              bgcolor: "#dcfce7",
-              border: "2px solid #e2e8f0",
+              bgcolor: theme.palette.success.light,
+              border: `2px solid ${theme.palette.custom.divider}`,
               borderRadius: "50%",
               "&:hover": {
-                bgcolor: "#bbf7d0",
+                bgcolor: theme.palette.success.dark,
               },
             }}
           >
-            <FavoriteIcon sx={{ fontSize: 18, color: "#16a34a" }} />
+            <FavoriteIcon
+              sx={{ fontSize: 18, color: theme.palette.success.main }}
+            />
           </IconButton>
         </Box>
       </Box>
