@@ -75,7 +75,7 @@ function HeroStats() {
   return (
     <Box
       sx={{
-        bgcolor: "#1e293b",
+        bgcolor: (t) => t.palette.custom.heroStatsBg,
         py: 3,
         px: 2,
       }}
@@ -102,7 +102,7 @@ function HeroStats() {
                 fontFamily: "'Barlow', sans-serif",
                 fontWeight: 700,
                 fontSize: { xs: 24, md: 32 },
-                color: "#ffffff",
+                color: (t) => t.palette.primary.contrastText,
                 lineHeight: 1,
               }}
             >
@@ -112,7 +112,7 @@ function HeroStats() {
               sx={{
                 fontFamily: "'Inter', sans-serif",
                 fontSize: 14,
-                color: "#94a3b8",
+                color: (t) => t.palette.custom.cardImagePlaceholder,
                 mt: 0.5,
               }}
             >
@@ -131,7 +131,7 @@ function HeroStats() {
 
 function WhyChooseUsSection() {
   return (
-    <Box component="section" sx={{ py: 8, px: 2, bgcolor: "#f8fafc" }}>
+    <Box component="section" sx={{ py: 8, px: 2, bgcolor: (t) => t.palette.background.default }}>
       <Box sx={{ maxWidth: 1456, mx: "auto", px: { xs: 2, md: 5 } }}>
         <SectionHeader title="Why Choose Us" />
         <Stack
@@ -163,7 +163,7 @@ type PopularMakesSectionProps = {
 
 function PopularMakesSection({ onMakeClick }: PopularMakesSectionProps) {
   return (
-    <Box component="section" sx={{ py: 8, px: 2, bgcolor: "#ffffff" }}>
+    <Box component="section" sx={{ py: 8, px: 2, bgcolor: (t) => t.palette.background.paper }}>
       <Box sx={{ maxWidth: 1456, mx: "auto", px: { xs: 2, md: 5 } }}>
         <SectionHeader title="Popular Makes" />
         <Stack
@@ -206,12 +206,12 @@ function TrendingCarsSection({
   const trendingCars = cars.slice(0, 4);
 
   return (
-    <Box component="section" sx={{ py: 8, px: 2, bgcolor: "#f8fafc" }}>
+    <Box component="section" sx={{ py: 8, px: 2, bgcolor: (t) => t.palette.background.default }}>
       <Box sx={{ maxWidth: 1456, mx: "auto", px: { xs: 2, md: 5 } }}>
         <SectionHeader title="Trending Cars" onViewAll={onViewAll} />
         {trendingCars.length === 0 ? (
           <Typography
-            sx={{ color: "#64748b", textAlign: "center", py: 6, fontSize: 16 }}
+            sx={{ color: (t) => t.palette.text.secondary, textAlign: "center", py: 6, fontSize: 16 }}
           >
             No listings available yet. Check back soon.
           </Typography>
@@ -244,7 +244,7 @@ function TrendingCarsSection({
 
 function HowItWorksSection() {
   return (
-    <Box component="section" sx={{ py: 8, px: 2, bgcolor: "#ffffff" }}>
+    <Box component="section" sx={{ py: 8, px: 2, bgcolor: (t) => t.palette.background.paper }}>
       <Box sx={{ maxWidth: 1456, mx: "auto", px: { xs: 2, md: 5 } }}>
         <SectionHeader title="How It Works" />
         <Stack
@@ -267,7 +267,7 @@ function HowItWorksSection() {
                 sx={{
                   width: 56,
                   height: 56,
-                  bgcolor: "#dbeafe",
+                  bgcolor: (t) => t.palette.custom.featuredBadgeBg,
                   borderRadius: "9999px",
                   display: "flex",
                   alignItems: "center",
@@ -281,7 +281,7 @@ function HowItWorksSection() {
                     fontFamily: "'Barlow', sans-serif",
                     fontWeight: 700,
                     fontSize: 18,
-                    color: "#2563eb",
+                    color: (t) => t.palette.custom.featuredBadgeText,
                   }}
                 >
                   {item.step}
@@ -293,7 +293,7 @@ function HowItWorksSection() {
                   fontFamily: "'Barlow', sans-serif",
                   fontWeight: 600,
                   fontSize: 20,
-                  color: "#0f172a",
+                  color: (t) => t.palette.text.primary,
                   mb: 1,
                 }}
               >
@@ -305,7 +305,7 @@ function HowItWorksSection() {
                   fontFamily: "'Inter', sans-serif",
                   fontWeight: 400,
                   fontSize: 15,
-                  color: "#64748b",
+                  color: (t) => t.palette.text.secondary,
                   lineHeight: 1.6,
                 }}
               >
