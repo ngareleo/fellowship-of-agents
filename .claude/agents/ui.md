@@ -48,6 +48,23 @@ req = urllib.request.Request(
 json.loads(urllib.request.urlopen(req).read())
 ```
 
+## Theming
+
+All colour values in component files must come from the MUI theme. Never hardcode hex literals, named colours, or CSS colour functions directly in `src/components/` or `src/pages/` files.
+
+- Use the `sx` prop callback pattern to access theme tokens:
+  ```tsx
+  <Box sx={{ color: (t) => t.palette.text.secondary }}>...</Box>
+  ```
+- Use `useTheme()` when you need a token value in JavaScript logic (conditional styles, SVG fills, Chart.js config, etc.):
+  ```tsx
+  import { useTheme } from "@mui/material/styles";
+  const theme = useTheme();
+  const border = theme.palette.custom.divider;
+  ```
+- Refer to `src/theme/README.md` for the full list of available palette tokens (standard and custom), the typography scale, shape token, and usage examples.
+- If a token for the colour you need does not exist, add it following the "Adding new custom tokens" instructions in `src/theme/README.md` rather than writing a hardcoded value.
+
 ## Workflow
 
 1. Post to Slack that you have started the task.
