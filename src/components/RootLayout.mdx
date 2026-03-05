@@ -1,0 +1,49 @@
+{/* src/components/RootLayout.mdx */}
+
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Components/RootLayout" />
+
+# RootLayout
+
+The top-level shell component that wraps every page in the application. Renders the `AppHeader`
+and an `<Outlet>` from React Router where child page components are mounted.
+
+## Usage
+
+`RootLayout` is registered as the root route in the React Router configuration and is not used
+directly as a JSX element in application code. Its children are page-level components resolved by
+the router.
+
+```tsx
+// Example router configuration
+createBrowserRouter([
+  {
+    path: "/",
+    element: <RootLayout />,
+    children: [
+      { index: true, element: <HomePage /> },
+      { path: "cars/:id", element: <CarDetailPage /> },
+    ],
+  },
+]);
+```
+
+## Props
+
+`RootLayout` accepts no props. Navigation callbacks passed to `AppHeader` are hardwired internally:
+
+| Callback | Behaviour |
+|----------|-----------|
+| `onNavLinkClick` | Calls `navigate(href)` via `useNavigate` |
+| `onSignIn` | Navigates to `/auth` |
+| `onSearch` | Navigates to `/browse` |
+
+## Design notes
+
+- `RootLayout` has no Storybook story because it requires a live router context. Test it via the
+  page-level stories that use `createRoutesStub` (e.g. `DashboardPage.stories.tsx`).
+- The outer `Box` uses `minHeight: "100vh"` and `bgcolor: "background.default"` so the theme
+  background fills the full viewport even on short pages.
+- All navigation is delegated to the router via `useNavigate` — no URL manipulation is done
+  directly inside this component.

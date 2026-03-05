@@ -1,0 +1,46 @@
+{/* src/components/AppFooter.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as AppFooterStories from "./AppFooter.stories";
+
+<Meta of={AppFooterStories} />
+
+# AppFooter
+
+The application-wide footer used at the bottom of every page. It renders the brand logo, a tagline,
+three link groups (Buy, Sell, Company), a dividing rule, and a copyright / legal row.
+
+## Usage
+
+<Canvas of={AppFooterStories.Default} />
+
+## Props
+
+`AppFooter` accepts no props — the link groups are defined by the internal `FOOTER_LINK_GROUPS`
+constant. When a `linkGroups` prop is added in a future iteration, this table will be updated.
+
+## Responsive behaviour
+
+### Mobile
+
+<Canvas of={AppFooterStories.Mobile} />
+
+On narrow viewports the brand block and link groups wrap vertically. The `gap` between them
+switches from `0` to `4` spacing units at the `xs` breakpoint.
+
+### Tablet
+
+<Canvas of={AppFooterStories.Tablet} />
+
+At the tablet breakpoint the layout is an intermediate state between the stacked mobile view and
+the side-by-side desktop view.
+
+## Design notes
+
+- The footer background is a hardcoded `#0f172a` (deep navy). This matches `theme.palette.custom`
+  dark surface tokens; if a token is added for this colour, prefer it over the literal.
+- Link text colour `#94a3b8` is the Slate-400 shade used consistently for secondary text on dark
+  surfaces throughout the app.
+- Links are rendered as `<Typography component="a">` elements and navigate to `href="#"` as
+  placeholders. Replace with `<Link>` from React Router when real routes are in place.
+- The component has no click handlers — interactions are handled via standard anchor `href`.

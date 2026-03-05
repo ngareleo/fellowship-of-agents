@@ -1,0 +1,46 @@
+{/* src/components/SellBanner.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as SellBannerStories from "./SellBanner.stories";
+
+<Meta of={SellBannerStories} />
+
+# SellBanner
+
+A full-width call-to-action section that prompts users to sell their car. Renders a dark background
+with a headline, supporting text, and a "Sell My Car" button.
+
+## Usage
+
+<Canvas of={SellBannerStories.Default} />
+<Controls of={SellBannerStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onSellClick` | `() => void` | `undefined` | Called when the "Sell My Car" button is clicked. |
+
+## With action
+
+<Canvas of={SellBannerStories.WithAction} />
+
+## Responsive behaviour
+
+### Mobile
+
+<Canvas of={SellBannerStories.Mobile} />
+
+On mobile, the text block and button stack vertically using `flexWrap: "wrap"` and `gap: 3`.
+
+### Tablet
+
+<Canvas of={SellBannerStories.Tablet} />
+
+## Design notes
+
+- The background colour `#0f172a` matches the `AppFooter` dark surface — they are typically placed
+  adjacent on the page to form a visual anchor at the bottom.
+- The component is rendered as a `<Box component="section">` for semantic HTML.
+- Copy ("Ready to Sell Your Car?", "Get a fair valuation…") is currently hardcoded. Extract to
+  props when the component needs to be reused with different messaging.
