@@ -36,6 +36,13 @@ yarn build-storybook  # produces static build in storybook-static/
 - Import shared helpers from `~/storybooks` (e.g., `withTheme`, `mockCar`).
 - Add the `autodocs` tag to a story to generate automatic documentation pages.
 
+**MDX documentation (required for all new components and pages):**
+- Every new component or page must have an MDX documentation file placed next to its story file.
+- MDX files follow the pattern `src/**/*.mdx` and are automatically picked up by Storybook.
+- Use `@storybook/blocks` imports (`Meta`, `Canvas`, `Controls`) in MDX files.
+- See `src/stories/Introduction.mdx` for the project MDX template and conventions.
+- `@storybook/addon-docs` is registered in `.storybook/main.ts`; it was already installed as a dependency and enables MDX rendering.
+
 **Inspecting Storybook (agents):**
 Use the `/inspect-storybook` skill to browse the live Storybook before implementing any component or debugging a UI issue. It uses Playwright to open `localhost:6006`, navigate the sidebar, and report what already exists. This should be the first step for both the UI Agent and the Bug Fixer Agent when dealing with component work.
 
