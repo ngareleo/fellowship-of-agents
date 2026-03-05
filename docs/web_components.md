@@ -33,6 +33,19 @@ A story file must:
 
 Failing to include a story file for a new component is grounds for a PR rejection at review time.
 
+### MDX documentation requirement
+
+Every new component or page must also include an MDX documentation file alongside its story file:
+
+```
+src/components/
+  MyComponent.tsx
+  MyComponent.stories.tsx
+  MyComponent.mdx          <- required
+```
+
+Use the template in `src/stories/Introduction.mdx` as a starting point. MDX files are rendered by the `@storybook/addon-docs` addon and must use `@storybook/blocks` imports (`Meta`, `Canvas`, `Controls`).
+
 ### Components module structure
 
 All presentational components live in `src/components/`. Each component file should export both the component function and its props type. The barrel file `src/components/index.ts` re-exports everything so consumers use `~/components` as the import path.

@@ -77,7 +77,48 @@ Build the component following the rules from Step 1:
 - Add to `src/components/index.ts`
 - Write the Storybook story
 
-### Step 6 — Report
+### Step 6 — Write the MDX documentation
+
+Every component and page must have a `.mdx` file alongside its source. Place it in the same
+directory as the component (e.g. `src/components/MyComponent.mdx`).
+
+Minimum MDX structure:
+
+```mdx
+{/* src/components/MyComponent.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as MyComponentStories from "./MyComponent.stories";
+
+<Meta of={MyComponentStories} />
+
+# MyComponent
+
+Brief description of what the component does and where it is used.
+
+## Usage
+
+<Canvas of={MyComponentStories.Default} />
+<Controls of={MyComponentStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `propName` | `type` | `default` | Description. |
+
+## Design notes
+
+- Key design decisions and constraints.
+```
+
+Rules:
+- Import blocks from `@storybook/addon-docs/blocks` (not `@storybook/blocks`).
+- Use `<Meta of={Stories}>` to attach the doc to its story file, or `<Meta title="...">` for components without stories.
+- Document all props in a table.
+- Embed a `<Canvas>` for each significant story variant.
+
+### Step 7 — Report
 
 Post a summary to Slack as the UI Agent (see `.claude/agents/ui.md` for the Slack snippet):
 - What was built

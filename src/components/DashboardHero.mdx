@@ -1,0 +1,53 @@
+{/* src/components/DashboardHero.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as DashboardHeroStories from "./DashboardHero.stories";
+
+<Meta of={DashboardHeroStories} />
+
+# DashboardHero
+
+The hero banner section at the top of the dashboard page. Renders a dark gradient background with a
+headline, subheadline, Buy/Sell toggle buttons, and a mock search bar containing keyword and zip
+code inputs plus a Search button.
+
+## Usage
+
+<Canvas of={DashboardHeroStories.Default} />
+<Controls of={DashboardHeroStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onSearch` | `(keyword: string, zipCode: string) => void` | `undefined` | Called when the Search button is clicked. Currently passes empty strings — wire up to real inputs in a future iteration. |
+| `onBuyClick` | `() => void` | `undefined` | Called when the Buy toggle button is clicked. |
+| `onSellClick` | `() => void` | `undefined` | Called when the Sell toggle button is clicked. |
+
+## With actions
+
+<Canvas of={DashboardHeroStories.WithActions} />
+
+## Responsive behaviour
+
+### Mobile
+
+<Canvas of={DashboardHeroStories.Mobile} />
+
+The headline font scales from `56px` on desktop to `36px` on mobile via the `fontSize` responsive
+object `{ xs: 36, md: 56 }`.
+
+### Tablet
+
+<Canvas of={DashboardHeroStories.Tablet} />
+
+## Design notes
+
+- The search bar in this component is a visual mock — the keyword and zip code fields are
+  `Typography` elements, not real `<input>` elements. Replace them with `SearchInput` components
+  when the search feature is wired up.
+- The background is a hardcoded CSS gradient (`#0f172a` to `#334155`). If a theme gradient token is
+  introduced, prefer it over the hardcoded value.
+- The `onSearch` callback currently always passes empty strings. The implementation should be
+  updated to track the keyword and zip code state internally (or lift state to the page) when real
+  search is built.

@@ -1,0 +1,32 @@
+{/* src/pages/HomePage.mdx */}
+
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import * as HomePageStories from "./HomePage.stories";
+
+<Meta of={HomePageStories} />
+
+# HomePage
+
+The root landing page of the AutoExchange application, served at `/`. It provides an entry point
+for visitors to discover and browse vehicle listings.
+
+## Usage
+
+<Canvas of={HomePageStories.Default} />
+
+## Overview
+
+`HomePage` is a page-level component with no props of its own. It is composed inside the
+application router and inherits the theme via the `withTheme` decorator in Storybook.
+
+Current state: the page contains a welcome heading and a descriptive tagline. It serves as a
+scaffold for the full browse/discovery experience that will be built out in subsequent issues.
+
+## Design notes
+
+- The page uses MUI `Container` with `maxWidth="lg"` and `py: 4` padding for consistent layout
+  within the `RootLayout` shell.
+- All copy should remain in sync with the brand name — currently "Autoshop" in the heading. Update
+  when the brand guidelines are finalised.
+- As the page grows, extract sub-sections (hero banner, listing grid, filters) into their own
+  components and document each separately.
