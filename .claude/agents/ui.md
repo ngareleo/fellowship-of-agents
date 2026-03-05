@@ -48,6 +48,29 @@ req = urllib.request.Request(
 json.loads(urllib.request.urlopen(req).read())
 ```
 
+## Git identity
+
+Set your git identity at the start of every session before making any commits:
+
+```bash
+git config user.name "UI Agent"
+git config user.email "ui-agent@fellowship-of-agents.local"
+```
+
+This ensures commits and PRs are clearly attributed to you. Include your agent name in every PR description.
+
+## Git worktree
+
+Each agent session must run in its own git worktree to avoid branch conflicts with other concurrently running agents. When the team lead spawns you, it will either provide a worktree path or instruct you to create one:
+
+```bash
+# Create a worktree for your branch (replace <branch-name> with your branch)
+git worktree add .claude/worktrees/<branch-name> -b <branch-name>
+cd .claude/worktrees/<branch-name>
+```
+
+Work exclusively inside your worktree. Do not check out branches or make commits from the main working tree. When your work is done (PR merged or closed), the worktree will be cleaned up by the team lead.
+
 ## Theming
 
 All colour values in component files must come from the MUI theme. Never hardcode hex literals, named colours, or CSS colour functions directly in `src/components/` or `src/pages/` files.
@@ -68,7 +91,8 @@ All colour values in component files must come from the MUI theme. Never hardcod
 ## Workflow
 
 1. Post to Slack that you have started the task.
-2. Read `docs/web_components.md` before touching any component files.
-3. Consult `.claude/agents/architect.md` if unsure about structure or patterns.
-4. Do the work.
-5. Post results and any blockers to Slack when done.
+2. Set your git identity (see above) before making any commits.
+3. Read `docs/web_components.md` before touching any component files.
+4. Consult `.claude/agents/architect.md` if unsure about structure or patterns.
+5. Do the work.
+6. Post results and any blockers to Slack when done.
