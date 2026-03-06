@@ -22,6 +22,7 @@ For testing our components, we use [storybook](https://storybook.js.org/docs) te
 - Stories and test files have `@typescript-eslint/no-explicit-any` relaxed.
 - CI: `.github/workflows/eslint.yml` runs `yarn lint` on every PR to `main`.
 - Run `yarn lint` to check, `yarn lint --fix` to auto-fix import order violations.
+- **ESLint errors and warnings are not optional — they must be fixed and cannot be ignored or suppressed.** The only exception is Storybook files (`*.stories.tsx`, `*.mdx`), which may have relaxed rules (e.g. `no-explicit-any`).
 
 ## React Router Setup (issue #2)
 

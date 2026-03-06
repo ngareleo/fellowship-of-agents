@@ -1,0 +1,61 @@
+{/* src/components/CategoryCard.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as CategoryCardStories from "./CategoryCard.stories";
+
+<Meta of={CategoryCardStories} />
+
+# CategoryCard
+
+A compact card representing a vehicle category (e.g. SUVs, Sedans, Electric). Displays an emoji
+icon inside a coloured circle, a category label, and a listing count. Optionally clickable.
+
+## Usage
+
+<Canvas of={CategoryCardStories.Default} />
+<Controls of={CategoryCardStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `emoji` | `string` | required | Emoji character shown inside the icon circle (e.g. `"🚙"`). |
+| `label` | `string` | required | Category display name (e.g. `"SUVs"`). |
+| `listingCount` | `string` | required | Formatted count string shown below the label (e.g. `"2,456 listings"`). |
+| `onClick` | `() => void` | `undefined` | When provided, the card becomes clickable and shows a hover shadow. |
+
+## Variants
+
+### SUV
+
+<Canvas of={CategoryCardStories.SUV} />
+
+### Electric
+
+<Canvas of={CategoryCardStories.Electric} />
+
+### Truck
+
+<Canvas of={CategoryCardStories.Truck} />
+
+## Clickable
+
+<Canvas of={CategoryCardStories.Clickable} />
+
+When `onClick` is provided, the cursor changes to `pointer` and a raised shadow appears on hover.
+Without `onClick` the card is purely presentational with no interactive affordance.
+
+## Row layout
+
+<Canvas of={CategoryCardStories.InARow} />
+
+Cards are designed to sit in a flex row with `flex: 1` and `minWidth: 200`. The parent is
+responsible for the containing flex/grid layout.
+
+## Design notes
+
+- The icon circle uses a hardcoded `#dbeafe` (Blue-100) background. If a theme token is introduced
+  for category icon backgrounds, prefer it.
+- The card has `flex: 1` so it expands to fill available space in a flex row — ensure the parent
+  constrains the max width if needed.
+- The `listingCount` is a pre-formatted string; the component does not format numbers itself.

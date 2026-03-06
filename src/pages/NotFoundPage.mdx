@@ -1,0 +1,35 @@
+{/* src/pages/NotFoundPage.mdx */}
+
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import * as NotFoundPageStories from "./NotFoundPage.stories";
+
+<Meta of={NotFoundPageStories} />
+
+# NotFoundPage
+
+The 404 error page shown when the user navigates to a route that does not exist. It displays a
+large "404" heading, a short explanatory message, and a "Back to Home" button that navigates the
+user to `/`.
+
+## Usage
+
+<Canvas of={NotFoundPageStories.Default} />
+
+## Navigation
+
+The "Back to Home" button calls `navigate("/")` from React Router's `useNavigate` hook. The
+component must therefore be rendered inside a router context.
+
+In Storybook this is provided by the `withRouter` decorator in the story file, which uses
+`createRoutesStub`. In the live application the component is rendered by the router's catch-all
+route.
+
+## Design notes
+
+- The page uses `Container maxWidth="sm"` to keep the error message centred and readable on large
+  screens.
+- The 404 heading is styled at `6rem` / `fontWeight: 700` for a bold visual impact.
+- The layout uses `flexDirection: "column"` with `alignItems: "center"` and `textAlign: "center"`,
+  making it responsive without any media-query logic.
+- If the application adds more error states (403, 500, etc.) consider extracting a generic
+  `ErrorPage` component that accepts a code and message as props.

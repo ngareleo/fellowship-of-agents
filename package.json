@@ -6,9 +6,11 @@
     "dev": "vite",
     "build": "rspack build",
     "lint": "eslint src",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\" \"**/*.json\"",
     "typecheck": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prepare": "husky"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -26,7 +28,8 @@
     "@rsbuild/plugin-react": "^1.4.5",
     "@rspack/cli": "^1.7.6",
     "@rspack/core": "^1.7.6",
-    "@storybook/react": "^10.2.14",
+    "@storybook/addon-docs": "^10.2.15",
+    "@storybook/react": "^10.2.15",
     "@types/node": "^25.3.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
@@ -35,10 +38,29 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import-x": "^4.16.1",
     "eslint-plugin-react-hooks": "^7.0.1",
-    "storybook": "^10.2.14",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.2",
+    "prettier": "^3.8.1",
+    "storybook": "^10.2.15",
     "storybook-react-rsbuild": "^3.3.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.json": [
+      "prettier --write"
+    ]
+  },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "printWidth": 100
   }
 }

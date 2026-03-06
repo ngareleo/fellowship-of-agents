@@ -1,0 +1,75 @@
+{/* src/components/CarCard.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as CarCardStories from "./CarCard.stories";
+
+<Meta of={CarCardStories} />
+
+# CarCard
+
+A card component that displays a summary of a single vehicle listing. It shows a hero image (or a
+placeholder if none is provided), the car title, key specifications (mileage, fuel type,
+transmission), the listed price, and two actions: "View Details" and a favourite toggle.
+
+## Usage
+
+<Canvas of={CarCardStories.Default} />
+<Controls of={CarCardStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `car` | `Car` | required | The vehicle data object (see type definition below). |
+| `onViewDetails` | `(id: string) => void` | required | Called with `car.id` when the View Details button is clicked. |
+| `onFavourite` | `(id: string) => void` | required | Called with `car.id` when the favourite heart button is clicked. |
+| `featured` | `boolean` | `false` | When `true`, a "Featured" chip is shown in the top-left of the image area. |
+| `isNew` | `boolean` | `false` | When `true`, a "New Listing" chip is shown in the top-right of the image area. |
+
+### Car type
+
+```ts
+type Car = {
+  id: string;
+  make: string;
+  model: string;
+  year: number;
+  price: number;
+  mileage: number;
+  fuelType: "gasoline" | "diesel" | "electric" | "hybrid";
+  transmission: "automatic" | "manual";
+  color: string;
+  imageUrl?: string;
+};
+```
+
+## Badge variants
+
+<Canvas of={CarCardStories.Featured} />
+<Canvas of={CarCardStories.NewListing} />
+<Canvas of={CarCardStories.FeaturedAndNew} />
+
+## With a real image
+
+<Canvas of={CarCardStories.WithImage} />
+
+When `car.imageUrl` is provided the image fills the 220 px hero area with `object-fit: cover`.
+Without it, a grey gradient placeholder with a car emoji is shown.
+
+## Fuel type variants
+
+<Canvas of={CarCardStories.DieselManual} />
+<Canvas of={CarCardStories.Electric} />
+<Canvas of={CarCardStories.Hybrid} />
+
+The spec row label for fuel type and transmission is derived by capitalising the first letter of the
+enum value, so `"electric"` renders as `"Electric"`.
+
+## Design notes
+
+- The card has a fixed width of `340 px`. Use a grid or flex container in the parent to lay out
+  multiple cards.
+- Pricing is formatted with `toLocaleString()` using the runtime locale. The currency symbol `$`
+  is prepended manually; adjust if the app goes multi-currency.
+- The favourite button does not maintain any internal toggle state — the parent is responsible for
+  tracking which cars are favourited and re-rendering with a different icon or colour if needed.

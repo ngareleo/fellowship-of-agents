@@ -1,0 +1,80 @@
+{/* src/components/ListingCard.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as ListingCardStories from "./ListingCard.stories";
+
+<Meta of={ListingCardStories} />
+
+# ListingCard
+
+A card component for displaying an individual vehicle listing in a grid or row. Shows a hero image
+(or emoji placeholder), an optional badge chip, the listing title, mileage, fuel type, price,
+location, and an optional "View Details" button.
+
+## Usage
+
+<Canvas of={ListingCardStories.Default} />
+<Controls of={ListingCardStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | required | The listing title (e.g. `"2023 BMW X5 xDrive40i"`). |
+| `mileage` | `string` | required | Pre-formatted mileage string (e.g. `"12,450 mi"`). |
+| `fuelType` | `string` | required | Fuel type label (e.g. `"Gas"`, `"Electric"`). |
+| `price` | `string` | required | Pre-formatted price string (e.g. `"$52,990"`). |
+| `location` | `string` | required | Location string (e.g. `"Los Angeles, CA"`). |
+| `emoji` | `string` | `"🚗"` | Fallback emoji shown when no `imageUrl` is provided. |
+| `imageUrl` | `string` | `undefined` | Optional URL for the hero image. |
+| `badge` | `ListingBadge` | `undefined` | Optional badge chip. See badge variants below. |
+| `showViewDetails` | `boolean` | `false` | When `true`, renders a "View Details" button at the bottom. |
+| `onViewDetails` | `() => void` | `undefined` | Called when the View Details button is clicked. |
+
+### ListingBadge type
+
+```ts
+type ListingBadge =
+  | { type: "featured" }
+  | { type: "verified" }
+  | { type: "hot" }
+  | { type: "new" };
+```
+
+## Badge variants
+
+### Featured
+
+<Canvas of={ListingCardStories.FeaturedBadge} />
+
+### Verified
+
+<Canvas of={ListingCardStories.VerifiedBadge} />
+
+### Hot
+
+<Canvas of={ListingCardStories.HotBadge} />
+
+### New
+
+<Canvas of={ListingCardStories.NewBadge} />
+
+## With View Details button
+
+<Canvas of={ListingCardStories.WithViewDetails} />
+
+## With image
+
+<Canvas of={ListingCardStories.WithImage} />
+
+When `imageUrl` is provided the image fills the 200 px hero area with `object-fit: cover`. Without
+it, a grey gradient placeholder with the `emoji` prop is rendered.
+
+## Design notes
+
+- All price, mileage, and location values are pre-formatted strings — the component does not format
+  numbers or apply localisation.
+- The card uses `flex: 1; minWidth: 280` to work well inside a flex row layout. The parent controls
+  how many cards appear per row.
+- Badge colours are hardcoded per type (`featured` → blue, `verified` → green, `hot` → red,
+  `new` → purple). Prefer theme tokens if a colour palette for badge variants is added to the theme.

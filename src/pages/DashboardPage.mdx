@@ -1,0 +1,56 @@
+{/* src/pages/DashboardPage.mdx */}
+
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import * as DashboardPageStories from "./DashboardPage.stories";
+
+<Meta of={DashboardPageStories} />
+
+# DashboardPage
+
+The main listing dashboard page, served at `/`. It composes the full page experience: a
+`DashboardHeader`, a `DashboardHero` banner, a categories row, a featured listings grid, a latest
+arrivals grid, a `SellBanner`, and an `AppFooter`.
+
+## Usage
+
+<Canvas of={DashboardPageStories.Default} />
+
+## With actions
+
+<Canvas of={DashboardPageStories.WithActions} />
+
+This story wires up all interactive callbacks (navigation, search, sell CTA) using Storybook
+actions so you can observe handler invocations in the Actions panel.
+
+## Overview
+
+`DashboardPage` is a page-level component with no props of its own. All data is currently sourced
+from static mock arrays defined in the component file itself. In a future iteration these will be
+replaced with real API calls via the Zustand store.
+
+### Page sections
+
+| Section | Component(s) | Description |
+|---------|-------------|-------------|
+| Header | `DashboardHeader` | Navigation bar with logo, links, and account actions. |
+| Hero | `DashboardHero` | Full-width banner with search and Buy/Sell CTA. |
+| Categories | `CategoryCard` (row) | Horizontal row of vehicle category cards. |
+| Featured listings | `SectionHeader` + `ListingCard` (grid) | Featured vehicles grid with "View All" link. |
+| Latest arrivals | `SectionHeader` + `ListingCard` (grid) | Latest vehicle listings grid. |
+| Sell CTA | `SellBanner` | Dark banner prompting users to sell their car. |
+| Footer | `AppFooter` | Site-wide footer with links and copyright. |
+
+## Router context
+
+The page uses `useNavigate` internally (via `DashboardHeader`). In Storybook it is wrapped with a
+`createRoutesStub` decorator to provide the required router context. In the application it is
+rendered inside `RootLayout`.
+
+## Design notes
+
+- All content (categories, listings) is currently static mock data. Extract to the Zustand store
+  and a data layer when the real API is integrated.
+- The page uses `Box sx={{ minHeight: "100vh" }}` as the outer container so the footer anchors to
+  the bottom on short screens.
+- Section grids use `display: "flex"; flexWrap: "wrap"` rather than MUI `Grid` for simplicity.
+  Migrate to `Grid` if the layout needs more control over column counts at different breakpoints.

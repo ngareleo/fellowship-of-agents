@@ -13,7 +13,7 @@ You are resuming work on issue `#$ARGUMENTS`. Your previous session ended when y
 ### Step 1 — Fetch the issue
 
 ```bash
-~/bin/gh issue view $ARGUMENTS --repo ngareleo/fellowship-of-agents \
+/usr/bin/gh issue view $ARGUMENTS --repo ngareleo/fellowship-of-agents \
   --json title,body,labels,comments
 ```
 
@@ -22,7 +22,7 @@ Read the full title, body, and all comments. Look for a `pending_review` label a
 ### Step 2 — Find the open PR for this issue
 
 ```bash
-~/bin/gh pr list --repo ngareleo/fellowship-of-agents --state open \
+/usr/bin/gh pr list --repo ngareleo/fellowship-of-agents --state open \
   --json number,title,headRefName,body | \
   python3 -c "
 import json, sys, os
@@ -37,14 +37,16 @@ for p in matches:
 ### Step 3 — Read the review comments
 
 ```bash
-~/bin/gh pr view <PR-NUMBER> --repo ngareleo/fellowship-of-agents \
+/usr/bin/gh pr view <PR-NUMBER> --repo ngareleo/fellowship-of-agents \
   --json reviews,comments,body
-~/bin/gh api repos/ngareleo/fellowship-of-agents/pulls/<PR-NUMBER>/comments \
+/usr/bin/gh api repos/ngareleo/fellowship-of-agents/pulls/<PR-NUMBER>/comments \
   | python3 -c "
 import json, sys
 comments = json.load(sys.stdin)
 for c in comments:
-    print(f'[{c[\"path\"]}:{c[\"line\"]}] {c[\"user\"][\"login\"]}: {c[\"body\"]}')
+    body = c.get('body','')
+    if not body.startswith('[vc]'):
+        print(f'[{c[\"path\"]}:{c.get(\"line\",\"?\")}] #{c[\"id\"]} {c[\"user\"][\"login\"]}: {body}')
 "
 ```
 
@@ -81,21 +83,87 @@ Use the relevant agent's Slack identity (see `.claude/agents/`) before proceedin
 
 Apply all changes requested in the review comments. Push to the existing branch when done.
 
-### Step 9 — Confirm CI checks are green
+### Step 8b — Reply to and resolve each review comment
 
-After pushing, wait for all GitHub Actions checks to complete:
+After pushing the fix, for **every** review comment you addressed:
+
+1. **Reply to the comment** via the GitHub REST API so the reviewer can see it was handled:
 
 ```bash
-gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents --watch
+# Get review comment IDs
+/usr/bin/gh api repos/ngareleo/fellowship-of-agents/pulls/<PR-NUMBER>/comments \
+  | python3 -c "
+import json,sys
+for c in json.load(sys.stdin):
+    body=c.get('body','')
+    if not body.startswith('[vc]'):
+        print(f'{c[\"id\"]} [{c[\"path\"]}]: {body[:80]}')
+"
+
+# Reply to a specific comment
+/usr/bin/gh api repos/ngareleo/fellowship-of-agents/pulls/<PR-NUMBER>/comments/<COMMENT-ID>/replies \
+  -X POST -f body="Fixed — <brief description of what you changed>"
 ```
 
-- If all checks pass — continue to Step 9.
-- If any check fails — read the failure output, fix the issue, push again, and re-run this step. Do not post to Slack until all checks are green.
+2. **Resolve each thread** via the GitHub GraphQL API:
+
+```bash
+# Get unresolved thread node IDs
+/usr/bin/gh api graphql -f query='
+query($owner:String!, $repo:String!, $pr:Int!) {
+  repository(owner:$owner, name:$repo) {
+    pullRequest(number:$pr) {
+      reviewThreads(first:50) {
+        nodes { id isResolved comments(first:1) { nodes { body path } } }
+      }
+    }
+  }
+}' -f owner=ngareleo -f repo=fellowship-of-agents -F pr=<PR-NUMBER> \
+  | python3 -c "
+import json,sys
+d=json.load(sys.stdin)
+threads=d['data']['repository']['pullRequest']['reviewThreads']['nodes']
+for t in threads:
+    if not t['isResolved']:
+        c=t['comments']['nodes'][0] if t['comments']['nodes'] else {}
+        print(f'{t[\"id\"]} [{c.get(\"path\",\"?\")}]: {c.get(\"body\",\"\")[:60]}')
+"
+
+# Resolve a thread (replace <THREAD-ID> with the node ID from above)
+/usr/bin/gh api graphql -f query='
+mutation($id:ID!) { resolveReviewThread(input:{threadId:$id}) { thread { isResolved } } }
+' -f id=<THREAD-ID>
+```
+
+### Step 9 — Confirm CI checks are green
+
+After pushing, wait only for the two required checks — **TypeScript type check** and **Storybook Publish**:
+
+```bash
+while true; do
+  output=$(/usr/bin/gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents 2>/dev/null)
+  ts_state=$(echo "$output" | grep "TypeScript type check" | awk '{print $2}')
+  sb_state=$(echo "$output" | grep "Storybook Publish" | awk '{print $2}')
+  echo "TypeScript: $ts_state | Storybook: $sb_state"
+  if [[ "$ts_state" == "fail" || "$sb_state" == "fail" ]]; then
+    echo "A required check failed — fixing."
+    break
+  fi
+  if [[ "$ts_state" == "pass" && "$sb_state" == "pass" ]]; then
+    echo "Required checks passed."
+    break
+  fi
+  sleep 30
+done
+```
+
+- If both pass — continue to Step 10.
+- If either fails — read the failure, fix and push, then re-run this step.
 
 ```bash
 # To see failure details:
-gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents
-gh run view --repo ngareleo/fellowship-of-agents --log-failed
+/usr/bin/gh pr checks <PR-number> --repo ngareleo/fellowship-of-agents
+/usr/bin/gh run view --repo ngareleo/fellowship-of-agents --log-failed
 ```
 
 ### Step 10 — Post completion update to Slack

@@ -1,0 +1,61 @@
+{/* src/components/AppHeader.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as AppHeaderStories from "./AppHeader.stories";
+
+<Meta of={AppHeaderStories} />
+
+# AppHeader
+
+The application navigation header used across all pages of the AutoExchange platform. It renders
+the brand logo, navigation links, a search button, and a sign-in button. On narrow viewports the
+nav links collapse into a slide-out drawer accessed via a hamburger menu.
+
+## Usage
+
+<Canvas of={AppHeaderStories.Default} />
+<Controls of={AppHeaderStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `navLinks` | `NavLink[]` | See below | Array of `{ label, href }` objects rendered as nav items. |
+| `onSignIn` | `() => void` | — | Called when the Sign In button is clicked. |
+| `onSearch` | `() => void` | — | Called when the search icon button is clicked. |
+| `onNavLinkClick` | `(href: string) => void` | — | Called when any nav link (desktop or mobile drawer) is clicked; receives the link's `href`. |
+
+The default `navLinks` value is:
+
+```ts
+[
+  { label: "Buy a Car",   href: "/" },
+  { label: "Sell Your Car", href: "/sell" },
+  { label: "Browse",      href: "/browse" },
+  { label: "Financing",   href: "/financing" },
+]
+```
+
+## Responsive behaviour
+
+<Canvas of={AppHeaderStories.Mobile} />
+
+At the `md` breakpoint and below (`< 900 px`) the desktop nav links and Sign In button are hidden.
+A hamburger icon (`MenuIcon`) appears in their place and opens a right-anchored `Drawer` that
+contains the same links and a full-width Sign In button.
+
+## Custom nav links
+
+<Canvas of={AppHeaderStories.CustomNavLinks} />
+
+Pass a custom `navLinks` array to tailor the navigation to a specific context, such as a marketing
+or authenticated shell.
+
+## Design notes
+
+- The header background is intentionally transparent so the parent page can supply a gradient or
+  solid background behind it.
+- The logo icon box uses a fixed blue (`#2563eb`) which maps to `primary.main` in the MUI theme.
+  Prefer reading the colour from `theme.palette.primary.main` if the theme changes.
+- The component does **not** perform any routing itself; all navigation is delegated to the
+  `onNavLinkClick` callback so the caller can integrate with React Router or any other router.

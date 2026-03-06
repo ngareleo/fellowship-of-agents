@@ -1,0 +1,79 @@
+{/* src/components/DashboardHeader.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as DashboardHeaderStories from "./DashboardHeader.stories";
+
+<Meta of={DashboardHeaderStories} />
+
+# DashboardHeader
+
+The navigation header used on the main dashboard. Renders the AutoExchange brand logo, a centred
+set of nav links with active-state highlighting, and right-aligned icon buttons for Favourites and
+Account plus a Sign In button.
+
+## Usage
+
+<Canvas of={DashboardHeaderStories.Default} />
+<Controls of={DashboardHeaderStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `navLinks` | `DashboardHeaderNavLink[]` | See below | Array of nav link objects. |
+| `onSignIn` | `() => void` | `undefined` | Called when the Sign In button is clicked. |
+| `onFavourites` | `() => void` | `undefined` | Called when the Favourites icon button is clicked. |
+| `onAccount` | `() => void` | `undefined` | Called when the Account icon button is clicked. |
+| `onNavLinkClick` | `(href: string) => void` | `undefined` | Called when any nav link is clicked; receives the link's `href`. |
+
+### DashboardHeaderNavLink type
+
+```ts
+type DashboardHeaderNavLink = {
+  label: string;
+  href: string;
+  active?: boolean;
+};
+```
+
+The default `navLinks` value is:
+
+```ts
+[
+  { label: "Buy",       href: "/",          active: true },
+  { label: "Sell",      href: "/sell" },
+  { label: "Search",    href: "/browse" },
+  { label: "Financing", href: "/financing" },
+]
+```
+
+## Variants
+
+### Custom nav links
+
+<Canvas of={DashboardHeaderStories.CustomNavLinks} />
+
+### Sell link active
+
+<Canvas of={DashboardHeaderStories.SellActive} />
+
+An active link is rendered in `#2563eb` (primary blue) at `fontWeight: 600`. Inactive links use
+`#475569` (Slate-600) at `fontWeight: 500`.
+
+## Responsive behaviour
+
+### Mobile
+
+<Canvas of={DashboardHeaderStories.Mobile} />
+
+### Tablet
+
+<Canvas of={DashboardHeaderStories.Tablet} />
+
+## Design notes
+
+- Unlike `AppHeader`, `DashboardHeader` does not collapse to a hamburger menu on mobile — it relies
+  on the `DashboardPage` layout to handle narrow-viewport behaviour at the page level.
+- The component is rendered as an MUI `AppBar` with `position="static"` and `elevation={0}` so it
+  integrates naturally in a flex-column page layout without fixed positioning.
+- All navigation is delegated to `onNavLinkClick` — the component does not perform routing itself.

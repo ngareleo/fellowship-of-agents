@@ -1,0 +1,45 @@
+{/* src/components/SectionHeader.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as SectionHeaderStories from "./SectionHeader.stories";
+
+<Meta of={SectionHeaderStories} />
+
+# SectionHeader
+
+A simple section heading row used above content grids and lists on the dashboard. Renders a title
+on the left and an optional "View All" button on the right.
+
+## Usage
+
+<Canvas of={SectionHeaderStories.Default} />
+<Controls of={SectionHeaderStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `title` | `string` | required | The section heading text (e.g. `"Featured Listings"`). |
+| `onViewAll` | `() => void` | `undefined` | When provided, renders a "View All" outlined button on the right. |
+
+## Without View All button
+
+<Canvas of={SectionHeaderStories.NoViewAll} />
+
+When `onViewAll` is `undefined` the button is not rendered and the title takes the full width.
+
+## Long title
+
+<Canvas of={SectionHeaderStories.LongTitle} />
+
+The title and button share a flex row with `justifyContent: "space-between"`. Long titles truncate
+at the available width before the button.
+
+## Design notes
+
+- The heading uses the Barlow font at `28px` / `fontWeight: 400`, consistent with other
+  section-level headings in the dashboard.
+- The "View All" button is an MUI `outlined` variant with a `2px` border to maintain visual weight
+  next to the large heading.
+- `SectionHeader` has a bottom margin of `mb: 3` (24 px) built in, so no extra spacing wrapper is
+  needed in the parent.
