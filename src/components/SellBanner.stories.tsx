@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mui/material";
-import { SellBanner } from "./SellBanner";
+import type { Meta, StoryObj } from "@storybook/react";
 import { withTheme } from "~/storybooks";
+import { SellBanner } from "./SellBanner";
 
 const meta: Meta<typeof SellBanner> = {
   title: "Components/SellBanner",

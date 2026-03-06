@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import React from "react";
 import type { Decorator } from "@storybook/react";
+import React from "react";
 import { createRoutesStub } from "react-router";
-import { DashboardPage } from "./DashboardPage";
 import { withTheme } from "~/storybooks";
+import { DashboardPage } from "./DashboardPage";
 
 const withRouter: Decorator = (Story) => {
   const Stub = createRoutesStub([{ path: "/", Component: Story }]);

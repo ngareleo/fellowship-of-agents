@@ -7,12 +7,12 @@
  *   import { mockCar, withTheme } from "~/storybooks";
  */
 
-import type { Decorator } from "@storybook/react";
-import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
+import type { Decorator } from "@storybook/react";
 import React from "react";
-import type { Car } from "~/types";
 import theme from "~/theme";
+import type { Car } from "~/types";
 
 // ---------------------------------------------------------------------------
 // Theme decorator — wraps stories in the app's MUI theme

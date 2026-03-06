@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mui/material";
-import { ListingCard } from "./ListingCard";
+import type { Meta, StoryObj } from "@storybook/react";
 import { withTheme } from "~/storybooks";
+import { ListingCard } from "./ListingCard";
 
 const meta: Meta<typeof ListingCard> = {
   title: "Components/ListingCard",
