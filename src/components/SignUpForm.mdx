@@ -1,0 +1,86 @@
+{/* src/components/SignUpForm.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as SignUpFormStories from "./SignUpForm.stories";
+
+<Meta of={SignUpFormStories} />
+
+# SignUpForm
+
+A controlled registration form with full name, email, password, and confirm-password fields (the
+two password fields each have an independent show/hide toggle). Social sign-up buttons for Google
+and Facebook are shown below the primary submit button.
+
+The component manages its own field state internally. Validation errors and loading state are
+passed in as props so the parent controls registration logic.
+
+## Usage
+
+<Canvas of={SignUpFormStories.Default} />
+<Controls of={SignUpFormStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onSubmit` | `(values: SignUpFormValues) => void` | — | Called when the user submits the form. Receives `{ fullName, email, password, confirmPassword }`. |
+| `onGoogleSignUp` | `() => void` | — | Called when the user clicks the Google social button. |
+| `onFacebookSignUp` | `() => void` | — | Called when the user clicks the Facebook social button. |
+| `errors` | `SignUpFormError` | — | Validation errors to display. Keys: `fullName`, `email`, `password`, `confirmPassword`, `general`. |
+| `loading` | `boolean` | `false` | When `true`, the submit button is disabled and shows "Creating account…". |
+
+### SignUpFormValues type
+
+```ts
+type SignUpFormValues = {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+```
+
+### SignUpFormError type
+
+```ts
+type SignUpFormError = {
+  fullName?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  general?: string;
+};
+```
+
+## Variants
+
+### With field errors
+
+<Canvas of={SignUpFormStories.WithErrors} />
+
+Field-level errors appear as helper text beneath each invalid input. All four fields can carry
+independent error messages simultaneously.
+
+### General error
+
+<Canvas of={SignUpFormStories.GeneralError} />
+
+A `general` error renders as a styled banner above the fields. Use it for errors not tied to a
+specific field, such as "email already registered".
+
+### Loading
+
+<Canvas of={SignUpFormStories.Loading} />
+
+Pass `loading={true}` while the account-creation request is in flight. The submit button is
+disabled and its label changes to "Creating account…".
+
+## Design notes
+
+- The password and confirm-password fields each have an independent `showPassword` / `showConfirm`
+  state so the user can reveal one without affecting the other.
+- The form uses `noValidate` to disable native browser validation.
+- All colour values come from the MUI theme (`palette.custom.*` and `palette.primary.*`) — no
+  hardcoded hex values.
+- The social buttons are placeholders — wire up `onGoogleSignUp` / `onFacebookSignUp` to your
+  OAuth flow.

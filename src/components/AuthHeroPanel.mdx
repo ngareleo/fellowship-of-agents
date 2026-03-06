@@ -1,0 +1,43 @@
+{/* src/components/AuthHeroPanel.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as AuthHeroPanelStories from "./AuthHeroPanel.stories";
+
+<Meta of={AuthHeroPanelStories} />
+
+# AuthHeroPanel
+
+The left-side decorative panel on the authentication page. It displays a large car emoji, a
+heading, and a subtext description on a dark gradient background. The panel is hidden on mobile
+viewports (`xs`) and visible from the `md` breakpoint upward.
+
+## Usage
+
+<Canvas of={AuthHeroPanelStories.Default} />
+<Controls of={AuthHeroPanelStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `heading` | `string` | `"Find Your Perfect Car"` | Heading text shown on the hero panel. |
+| `subtext` | `string` | `"Join thousands of happy customers…"` | Subtext shown below the heading. |
+
+## Variants
+
+### Custom copy
+
+<Canvas of={AuthHeroPanelStories.CustomCopy} />
+
+Use the `heading` and `subtext` props to adapt the panel copy for different campaigns or
+onboarding flows without changing the visual treatment.
+
+## Design notes
+
+- The gradient runs from `palette.custom.navbarBg` to `palette.custom.heroPanelGradientEnd` at
+  139.7 degrees, matching the Figma design node `8-2111`.
+- The panel occupies `flex: 1` of the split-screen layout alongside the form panel.
+- The car emoji is rendered as a `Typography` element (font size 120) so it inherits the system
+  emoji font and scales correctly across platforms.
+- Hidden on mobile via `display: { xs: "none", md: "flex" }` — the form panel takes the full
+  width on small screens.

@@ -56,6 +56,14 @@ const theme = createTheme({
       cardImagePlaceholder: "#94a3b8",
       divider: "#e2e8f0",
       navbarBg: "#0f172a",
+      // Auth page tokens
+      labelText: "#334155",           // slate-700 — form field labels
+      checkboxUnchecked: "#cbd5e1",   // slate-300 — unchecked checkbox border
+      primaryDisabled: "#93c5fd",     // blue-300 — disabled primary button background
+      errorText: "#ef4444",           // red-500 — inline error message text
+      errorBg: "#fef2f2",             // red-50 — error alert background
+      errorBorder: "#fecaca",         // red-200 — error alert border
+      heroPanelGradientEnd: "#334155",// slate-700 — hero panel gradient end colour
     },
   },
 
@@ -101,6 +109,14 @@ declare module "@mui/material/styles" {
       cardImagePlaceholder: string;
       divider: string;
       navbarBg: string;
+      // Auth page tokens
+      labelText: string;
+      checkboxUnchecked: string;
+      primaryDisabled: string;
+      errorText: string;
+      errorBg: string;
+      errorBorder: string;
+      heroPanelGradientEnd: string;
     };
   }
   interface PaletteOptions {
@@ -112,6 +128,14 @@ declare module "@mui/material/styles" {
       cardImagePlaceholder?: string;
       divider?: string;
       navbarBg?: string;
+      // Auth page tokens
+      labelText?: string;
+      checkboxUnchecked?: string;
+      primaryDisabled?: string;
+      errorText?: string;
+      errorBg?: string;
+      errorBorder?: string;
+      heroPanelGradientEnd?: string;
     };
   }
 }

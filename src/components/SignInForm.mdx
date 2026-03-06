@@ -1,0 +1,86 @@
+{/* src/components/SignInForm.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as SignInFormStories from "./SignInForm.stories";
+
+<Meta of={SignInFormStories} />
+
+# SignInForm
+
+A controlled sign-in form with email, password (with show/hide toggle), a remember-me checkbox,
+a forgot-password link, a primary submit button, and social sign-in buttons for Google and
+Facebook.
+
+The component manages its own field state internally. Validation errors and loading state are
+passed in as props so the parent controls authentication logic.
+
+## Usage
+
+<Canvas of={SignInFormStories.Default} />
+<Controls of={SignInFormStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onSubmit` | `(values: SignInFormValues) => void` | — | Called when the user submits the form. Receives `{ email, password, rememberMe }`. |
+| `onForgotPassword` | `() => void` | — | Called when the user clicks the "Forgot password?" link. |
+| `onGoogleSignIn` | `() => void` | — | Called when the user clicks the Google social button. |
+| `onFacebookSignIn` | `() => void` | — | Called when the user clicks the Facebook social button. |
+| `errors` | `SignInFormError` | — | Validation errors to display. Keys: `email`, `password`, `general`. |
+| `loading` | `boolean` | `false` | When `true`, the submit button is disabled and shows "Signing in…". |
+
+### SignInFormValues type
+
+```ts
+type SignInFormValues = {
+  email: string;
+  password: string;
+  rememberMe: boolean;
+};
+```
+
+### SignInFormError type
+
+```ts
+type SignInFormError = {
+  email?: string;
+  password?: string;
+  general?: string;
+};
+```
+
+## Variants
+
+### With field errors
+
+<Canvas of={SignInFormStories.WithErrors} />
+
+Field-level errors appear as helper text below the relevant input. Use this state after client-side
+validation or when the server returns field-specific error messages.
+
+### General error
+
+<Canvas of={SignInFormStories.GeneralError} />
+
+A `general` error renders as a styled banner above the fields. Use it for errors that are not
+tied to a specific field, such as incorrect credentials.
+
+### Loading
+
+<Canvas of={SignInFormStories.Loading} />
+
+Pass `loading={true}` while the sign-in request is in flight. The submit button is disabled and
+its label changes to "Signing in…".
+
+## Design notes
+
+- The form uses `noValidate` to disable native browser validation and rely on the `errors` prop
+  for a consistent cross-browser experience.
+- The password visibility toggle uses MUI `IconButton` inside an `InputAdornment` for full
+  keyboard and screen-reader accessibility (`aria-label` switches between "Show password" and
+  "Hide password").
+- All colour values come from the MUI theme (`palette.custom.*` and `palette.primary.*`) — no
+  hardcoded hex values.
+- The social buttons are placeholders — wire up `onGoogleSignIn` / `onFacebookSignIn` to your
+  OAuth flow.

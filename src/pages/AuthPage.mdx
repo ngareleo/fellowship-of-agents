@@ -1,0 +1,77 @@
+{/* src/pages/AuthPage.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as AuthPageStories from "./AuthPage.stories";
+
+<Meta of={AuthPageStories} />
+
+# AuthPage
+
+Full-screen authentication page that composes the `AuthHeroPanel`, `SignInForm`, and `SignUpForm`
+components into a split-screen layout.
+
+The left half shows the decorative hero panel (hidden on mobile). The right half contains a
+tabbed form panel with "Sign In" and "Register" tabs, a logo lockup, and a contextual footer
+link. The active tab is controlled internally; `initialTab` sets the starting state.
+
+Component hierarchy: `App -> AuthPage -> [AuthHeroPanel, SignInForm | SignUpForm]`
+
+## Usage
+
+<Canvas of={AuthPageStories.SignIn} />
+<Controls of={AuthPageStories.SignIn} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `initialTab` | `"signin" \| "signup"` | `"signin"` | Which tab is active when the page first renders. |
+| `onSignIn` | `(values: SignInFormValues) => void` | — | Called when the sign-in form is submitted. |
+| `onSignUp` | `(values: SignUpFormValues) => void` | — | Called when the sign-up form is submitted. |
+| `onForgotPassword` | `() => void` | — | Called when the user clicks "Forgot password?". |
+| `onGoogleAuth` | `() => void` | — | Called when Google auth is triggered from either form. |
+| `onFacebookAuth` | `() => void` | — | Called when Facebook auth is triggered from either form. |
+| `signInErrors` | `SignInFormError` | — | Validation errors forwarded to `SignInForm`. |
+| `signUpErrors` | `SignUpFormError` | — | Validation errors forwarded to `SignUpForm`. |
+| `loading` | `boolean` | `false` | Shows a loading state on the active form's submit button. |
+
+## Variants
+
+### Register tab
+
+<Canvas of={AuthPageStories.Register} />
+
+Pass `initialTab="signup"` to land on the registration form. The tab and footer link update
+accordingly.
+
+### Sign-in with errors
+
+<Canvas of={AuthPageStories.SignInWithErrors} />
+
+Pass `signInErrors` to surface authentication failures (e.g. wrong credentials) as a general
+error banner inside the sign-in form.
+
+### Sign-up with errors
+
+<Canvas of={AuthPageStories.SignUpWithErrors} />
+
+Pass `signUpErrors` to surface field-level validation failures inside the registration form.
+
+### Loading
+
+<Canvas of={AuthPageStories.SignInLoading} />
+
+Pass `loading={true}` while an auth request is in flight. The active form's submit button
+disables and shows a pending label.
+
+## Design notes
+
+- The layout is a full-viewport flex row. `AuthHeroPanel` takes `flex: 1` on the left; the form
+  panel takes `flex: 1` on the right, centred with a `maxWidth` of 420 px.
+- The hero panel is hidden via `display: { xs: "none", md: "flex" }`, giving the form panel the
+  full width on mobile.
+- The `onGoogleAuth` / `onFacebookAuth` props are forwarded to both forms so a single handler
+  works regardless of which tab is active.
+- The tab indicator and selected tab colour come from `palette.primary.main`; the divider from
+  `palette.custom.divider`.
+- Matches Figma design node `8-2111` in the Autocare file.

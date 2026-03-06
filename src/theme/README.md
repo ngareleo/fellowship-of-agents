@@ -45,6 +45,13 @@ These extend MUI's palette via TypeScript module augmentation (see bottom of `in
 | `palette.custom.cardImagePlaceholder` | `#94a3b8` | Car card image placeholder icon fill |
 | `palette.custom.divider` | `#e2e8f0` | Horizontal/vertical dividers |
 | `palette.custom.navbarBg` | `#0f172a` | Top navbar background |
+| `palette.custom.labelText` | `#334155` | Form field label text (slate-700) |
+| `palette.custom.checkboxUnchecked` | `#cbd5e1` | Unchecked checkbox border colour (slate-300) |
+| `palette.custom.primaryDisabled` | `#93c5fd` | Disabled primary button background (blue-300) |
+| `palette.custom.errorText` | `#ef4444` | Inline error message text colour (red-500) |
+| `palette.custom.errorBg` | `#fef2f2` | Error alert / banner background (red-50) |
+| `palette.custom.errorBorder` | `#fecaca` | Error alert / banner border (red-200) |
+| `palette.custom.heroPanelGradientEnd` | `#334155` | Auth hero panel gradient end colour (slate-700) |
 
 ---
 
