@@ -1,0 +1,57 @@
+{/* src/components/NewListingForm.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as NewListingFormStories from "./NewListingForm.stories";
+
+<Meta of={NewListingFormStories} />
+
+# NewListingForm
+
+A controlled form component for sellers to create a new car listing. Covers all required car
+details: make, model, year, price, mileage, colour, fuel type, transmission, description, and
+an image URL field with a drag-and-drop placeholder area.
+
+## Usage
+
+<Canvas of={NewListingFormStories.Default} />
+<Controls of={NewListingFormStories.Default} />
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `initialValues` | `Partial<NewListingFormValues>` | `{}` | Pre-populate fields (edit mode or review state). |
+| `errors` | `NewListingFormErrors` | `{}` | Validation errors keyed by field name — displayed as helper text below each field. |
+| `onSubmit` | `(values: NewListingFormValues) => void` | — | Called with current form values when the seller submits. |
+| `onCancel` | `() => void` | — | Called when the seller clicks the Cancel button. |
+| `isSubmitting` | `boolean` | `false` | Disables the submit button and shows "Publishing..." label while the form is being submitted. |
+
+## Variants
+
+### Validation errors
+
+<Canvas of={NewListingFormStories.WithValidationErrors} />
+
+Shows error messages beneath each required field. Pass a `errors` object keyed by field name.
+
+### Prefilled
+
+<Canvas of={NewListingFormStories.Prefilled} />
+
+Demonstrates edit-mode or review-before-publish by pre-populating all fields via `initialValues`.
+
+### Submitting
+
+<Canvas of={NewListingFormStories.Submitting} />
+
+The submit button is disabled and labelled "Publishing..." while `isSubmitting` is `true`.
+The Cancel button is also disabled to prevent abandonment mid-submit.
+
+## Design notes
+
+- All colours come from the MUI theme — no hardcoded hex values.
+- Fuel type and transmission use MUI `Select` with an accessible `InputLabel` / `labelId` pairing.
+- The image upload area is a visual placeholder only; drag-and-drop is not yet implemented.
+  Sellers can paste an image URL into the text field instead.
+- The form uses `noValidate` on the `<form>` element so browser-native validation is suppressed
+  in favour of the `errors` prop-driven approach.
