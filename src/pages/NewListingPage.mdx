@@ -1,0 +1,55 @@
+{/* src/pages/NewListingPage.mdx */}
+
+import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import * as NewListingPageStories from "./NewListingPage.stories";
+
+<Meta of={NewListingPageStories} />
+
+# NewListingPage
+
+The full-page view for sellers to create a new car listing. Composes the `DashboardHeader`,
+a page heading section, the `NewListingForm` component, and the `AppFooter`.
+
+## Usage
+
+<Canvas of={NewListingPageStories.Default} />
+
+## Submitting state
+
+<Canvas of={NewListingPageStories.Submitting} />
+
+Rendered while the form submission is in progress. The submit button in `NewListingForm` is
+disabled and labelled "Publishing..." so the seller gets clear feedback.
+
+## Page structure
+
+| Section | Component | Description |
+|---------|-----------|-------------|
+| Header | `DashboardHeader` | Navigation bar with logo, links, and account actions. |
+| Heading | inline `Typography` | Page title and sub-title above the form. |
+| Form | `NewListingForm` | Car details form with validation-error support. |
+| Footer | `AppFooter` | Site-wide footer with links and copyright. |
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onSubmit` | `(values: NewListingFormValues) => void` | — | Forwarded to `NewListingForm`. Called when the seller submits. |
+| `onCancel` | `() => void` | — | Forwarded to `NewListingForm`. Called on Cancel click. |
+| `isSubmitting` | `boolean` | `false` | Forwarded to `NewListingForm`. Shows loading state on submit button. |
+| `onSignIn` | `() => void` | — | Forwarded to `DashboardHeader`. |
+| `onNavLinkClick` | `(href: string) => void` | — | Forwarded to `DashboardHeader`. |
+
+## Router context
+
+`DashboardHeader` uses `useNavigate` internally. In Storybook the page is wrapped with a
+`createRoutesStub` decorator to provide the required router context. In the application it
+is rendered inside `RootLayout`.
+
+## Design notes
+
+- The page uses `minHeight: 100vh` with `flexDirection: column` and `flex: 1` on `main` so the
+  footer always anchors to the bottom even on short content.
+- All colours are sourced from the MUI theme palette — no hardcoded hex values.
+- Form validation is driven externally via the `errors` prop on `NewListingForm`. Wire up a
+  validation library (e.g. Zod + react-hook-form) in the route handler before passing errors down.
