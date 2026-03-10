@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mui/material";
-import { DashboardHeader } from "./DashboardHeader";
+import type { Meta, StoryObj } from "@storybook/react";
 import { withTheme } from "~/storybooks";
+import { DashboardHeader } from "./DashboardHeader";
 
 const meta: Meta<typeof DashboardHeader> = {
   title: "Components/DashboardHeader",

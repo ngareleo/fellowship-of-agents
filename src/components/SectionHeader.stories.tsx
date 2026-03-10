@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mui/material";
-import { SectionHeader } from "./SectionHeader";
+import type { Meta, StoryObj } from "@storybook/react";
 import { withTheme } from "~/storybooks";
+import { SectionHeader } from "./SectionHeader";
 
 const meta: Meta<typeof SectionHeader> = {
   title: "Components/SectionHeader",

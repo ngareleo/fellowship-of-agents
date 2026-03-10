@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mui/material";
-import { AppFooter } from "./AppFooter";
+import type { Meta, StoryObj } from "@storybook/react";
 import { withTheme } from "~/storybooks";
+import { AppFooter } from "./AppFooter";
 
 const meta: Meta<typeof AppFooter> = {
   title: "Components/AppFooter",

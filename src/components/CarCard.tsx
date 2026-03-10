@@ -1,3 +1,7 @@
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
+import SettingsIcon from "@mui/icons-material/Settings";
+import SpeedIcon from "@mui/icons-material/Speed";
 import {
   Box,
   Button,
@@ -7,10 +11,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import SpeedIcon from "@mui/icons-material/Speed";
-import LocalGasStationIcon from "@mui/icons-material/LocalGasStation";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { Car } from "~/types";
 
 export type CarCardProps = {

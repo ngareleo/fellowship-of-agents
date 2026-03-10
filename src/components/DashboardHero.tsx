@@ -1,6 +1,6 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
+import SearchIcon from "@mui/icons-material/Search";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
 export type DashboardHeroProps = {
   onSearch?: (keyword: string, zipCode: string) => void;

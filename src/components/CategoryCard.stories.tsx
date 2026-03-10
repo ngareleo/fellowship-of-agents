@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { Box } from "@mui/material";
-import { CategoryCard } from "./CategoryCard";
+import type { Meta, StoryObj } from "@storybook/react";
 import { withTheme } from "~/storybooks";
+import { CategoryCard } from "./CategoryCard";
 
 const meta: Meta<typeof CategoryCard> = {
   title: "Components/CategoryCard",

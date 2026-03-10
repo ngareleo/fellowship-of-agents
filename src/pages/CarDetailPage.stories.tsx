@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { createRoutesStub } from "react-router";
-import React from "react";
 import type { Decorator } from "@storybook/react";
-import { CarDetailPage } from "./CarDetailPage";
+import React from "react";
+import { createRoutesStub } from "react-router";
 import { withTheme } from "~/storybooks";
+import { CarDetailPage } from "./CarDetailPage";
 
 const withRouter: Decorator = (Story) => {
   const Stub = createRoutesStub([{ path: "/cars/:id", Component: Story }]);
