@@ -22,6 +22,7 @@ The project uses **React** with **Material UI (MUI)** exclusively. Key rules fro
 - **Structure**: App → Pages → Sections → Components. Components are the building blocks.
 - **Separation**: Keep presentation and data separate. All presentational components go in `src/components/`.
 - **Composability**: Build small, composable components that can be nested. Avoid large monolithic components.
+- **One component per file**: Each file in `src/components/` must export exactly one primary component. The only exception is when you need to split a component into `ComponentOuter` / `ComponentInner` pairs (e.g. to wrap with `React.Suspense`). Page files (`src/pages/`) must contain only the page component — any secondary UI element that could stand alone should be extracted to `src/components/`.
 - **Hooks**: Extract reusable logic into hooks. Check `src/components/readme.md` for existing hooks before creating new ones. New hooks go in `src/components/hooks/`.
 - **Storybook**: Every component needs a corresponding Storybook story.
 - **Exports**: Export both the component and its props type from the component file. Re-export through `src/components/index.ts`.

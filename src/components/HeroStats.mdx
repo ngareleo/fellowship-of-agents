@@ -1,0 +1,29 @@
+{/* src/components/HeroStats.mdx */}
+
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
+import * as HeroStatsStories from "./HeroStats.stories";
+
+<Meta of={HeroStatsStories} />
+
+# HeroStats
+
+A dark stats bar displayed directly below the hero section on the home page. Shows three
+platform-wide metrics (listings count, dealers count, satisfaction rate) side by side on a
+`heroStatsBg` themed dark background.
+
+## Usage
+
+<Canvas of={HeroStatsStories.Default} />
+<Controls of={HeroStatsStories.Default} />
+
+## Props
+
+This component takes no props. The stat values are static display data defined internally.
+
+## Design notes
+
+- Background colour uses the `palette.custom.heroStatsBg` theme token (slate-800 / `#1e293b`).
+- Stat values use Barlow at `32px` / `fontWeight: 700`; labels use Inter at `14px`.
+- The layout is a centred flex row with `gap: { xs: 4, md: 10 }` and `flexWrap: "wrap"` so it
+  stacks gracefully on narrow viewports.
+- Placed between `DashboardHero` and the first content section in the `HomePage` composition.

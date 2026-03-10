@@ -45,6 +45,7 @@ These extend MUI's palette via TypeScript module augmentation (see bottom of `in
 | `palette.custom.cardImagePlaceholder` | `#94a3b8` | Car card image placeholder icon fill |
 | `palette.custom.divider` | `#e2e8f0` | Horizontal/vertical dividers |
 | `palette.custom.navbarBg` | `#0f172a` | Top navbar background |
+| `palette.custom.heroStatsBg` | `#1e293b` | Hero stats bar background (slate-800) |
 
 ---
 

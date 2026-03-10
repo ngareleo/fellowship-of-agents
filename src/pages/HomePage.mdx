@@ -1,32 +1,59 @@
 {/* src/pages/HomePage.mdx */}
 
-import { Meta, Canvas } from "@storybook/addon-docs/blocks";
+import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
 import * as HomePageStories from "./HomePage.stories";
 
 <Meta of={HomePageStories} />
 
 # HomePage
 
-The root landing page of the AutoExchange application, served at `/`. It provides an entry point
-for visitors to discover and browse vehicle listings.
+The main landing / browse page of the Autocare application. Composes all hero, marketing, and
+listing sections into a full-page layout wired to the Zustand car store.
 
 ## Usage
 
 <Canvas of={HomePageStories.Default} />
+<Controls of={HomePageStories.Default} />
 
-## Overview
+## Props
 
-`HomePage` is a page-level component with no props of its own. It is composed inside the
-application router and inherits the theme via the `withTheme` decorator in Storybook.
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onSearch` | `(keyword: string, zipCode: string) => void` | `undefined` | Called when the hero search bar is submitted. |
+| `onViewDetails` | `(id: string) => void` | `() => {}` | Called when a car card's "View Details" button is clicked. |
+| `onFavourite` | `(id: string) => void` | `() => {}` | Called when a car card's favourite button is clicked. |
+| `onViewAllCars` | `() => void` | `undefined` | Called when "View All" is clicked in the Trending Cars section. |
+| `onMakeClick` | `(make: string) => void` | `undefined` | Called when a brand card in the Popular Makes section is clicked. |
+| `onSellClick` | `() => void` | `undefined` | Called when the "Sell My Car" button in the sell banner is clicked. |
 
-Current state: the page contains a welcome heading and a descriptive tagline. It serves as a
-scaffold for the full browse/discovery experience that will be built out in subsequent issues.
+## With actions
+
+<Canvas of={HomePageStories.WithActions} />
+
+Use the Actions panel in Storybook to see callbacks fire when interacting with the page.
+
+## Page sections
+
+The page is composed of the following sections in order:
+
+1. **DashboardHero** — dark hero with headline, search bar, and background image.
+2. **HeroStats** — stats bar displaying platform-wide metrics (50K+ listings, 12K+ dealers, 98% satisfaction).
+3. **Why Choose Us** — four `CategoryCard` tiles highlighting platform benefits.
+4. **Popular Makes** — six `CategoryCard` tiles for top car brands, each optionally clickable.
+5. **Trending Cars** — up to four `CarCard` tiles sourced from the `useFilteredCars` store hook.
+6. **How It Works** — three-step process explanation.
+7. **SellBanner** — call-to-action for sellers.
+8. **AppFooter** — site-wide footer.
+
+## Data
+
+Trending Cars data is read from the Zustand car store via `useFilteredCars()`. In Storybook, the
+`withMockStore` decorator seeds the store with mock data so the section renders real listings.
 
 ## Design notes
 
-- The page uses MUI `Container` with `maxWidth="lg"` and `py: 4` padding for consistent layout
-  within the `RootLayout` shell.
-- All copy should remain in sync with the brand name — currently "Autoshop" in the heading. Update
-  when the brand guidelines are finalised.
-- As the page grows, extract sub-sections (hero banner, listing grid, filters) into their own
-  components and document each separately.
+- All sections use a `maxWidth: 1456` inner container with `px: { xs: 2, md: 5 }` horizontal
+  padding for consistent alignment.
+- Alternating section backgrounds (`background.default` / `background.paper`) create visual
+  separation between content groups.
+- The page renders as `<Box component="main">` for semantic HTML landmark structure.

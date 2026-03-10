@@ -56,6 +56,7 @@ const theme = createTheme({
       cardImagePlaceholder: "#94a3b8",
       divider: "#e2e8f0",
       navbarBg: "#0f172a",
+      heroStatsBg: "#1e293b",
     },
   },
 
@@ -101,6 +102,7 @@ declare module "@mui/material/styles" {
       cardImagePlaceholder: string;
       divider: string;
       navbarBg: string;
+      heroStatsBg: string;
     };
   }
   interface PaletteOptions {
@@ -112,6 +114,7 @@ declare module "@mui/material/styles" {
       cardImagePlaceholder?: string;
       divider?: string;
       navbarBg?: string;
+      heroStatsBg?: string;
     };
   }
 }
