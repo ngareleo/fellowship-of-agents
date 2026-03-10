@@ -9,6 +9,7 @@ export { DashboardHeader } from './DashboardHeader';
 export type { DashboardHeaderProps, DashboardHeaderNavLink } from './DashboardHeader';
 export { DashboardHero } from './DashboardHero';
 export type { DashboardHeroProps } from './DashboardHero';
+export { HeroStats } from './HeroStats';
 export { ListingCard } from './ListingCard';
 export type { ListingCardProps, ListingBadge } from './ListingCard';
 export { RootLayout } from './RootLayout';

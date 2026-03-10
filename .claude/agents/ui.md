@@ -157,6 +157,12 @@ Always import blocks from `@storybook/addon-docs/blocks` — not from `@storyboo
 import { Meta, Canvas, Controls } from "@storybook/addon-docs/blocks";
 ```
 
+## Component structure rules
+
+- **One component per file**: Each file in `src/components/` must export exactly one primary component. The only exception is when you need to split a component into `ComponentOuter` / `ComponentInner` pairs (e.g. to wrap with `React.Suspense`).
+- **Page files contain only the page component**: Files in `src/pages/` must contain only the named page component (e.g. `HomePage`). Any secondary UI element that could stand alone must be extracted to `src/components/` with its own story and MDX file.
+- **Internal section helpers are allowed**: A page file may define private section-level functions (e.g. `WhyChooseUsSection`) that exist solely to keep the page component readable — provided they are not reusable outside the page and are not exported. Reusable components must always live in `src/components/`.
+
 ## Workflow
 
 1. Post to Slack that you have started the task.
